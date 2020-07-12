@@ -7608,7 +7608,7 @@ msgstr "Pode usar o formulário de acesso em"
 
 #: geonode/templates/pinax/notifications/account_active/account_active_subject.txt:1
 msgid "Welcome at"
-msgstr "Bem-vindo a"
+msgstr "Bem-vindo a ::"
 
 #: geonode/templates/pinax/notifications/account_active/short.txt:3
 msgid "Your account is now active"
