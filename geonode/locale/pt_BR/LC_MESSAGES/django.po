@@ -7357,17 +7357,17 @@ msgstr "Recombinando um mapa"
 
 #: geonode/templates/index.html:6
 msgid "Welcome!"
-msgstr "Bem-vindo!"
+msgstr "Bem-vindo! :"
 
 #: geonode/templates/index.html:19
 msgid "Welcome"
-msgstr "Bem-vindo"
+msgstr "Bem-vindo teste 2"
 
 #: geonode/templates/index.html:21
 msgid ""
 "GeoNode is an open source platform for sharing geospatial data and maps."
 msgstr ""
-"GeoNode é uma plataforma de código aberto para compartilhamento de dados "
+"GeoNode é uma plataforma (teste) de código aberto para compartilhamento de dados "
 "geoespaciais e mapas."
 
 #: geonode/templates/index.html:24
@@ -7932,7 +7932,7 @@ msgstr "Você pode utilizar o formulário de inscrição em "
 #, fuzzy
 #| msgid "Welcome"
 msgid "Welcome at"
-msgstr "Bem-vindo"
+msgstr "Bem-vindo teste 3"
 
 #: geonode/templates/pinax/notifications/account_active/short.txt:3
 #, fuzzy

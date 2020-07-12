@@ -286,7 +286,7 @@ msgstr "Administração Geonode"
 
 #: geonode/templates/index.html:19
 msgid "Welcome"
-msgstr "Bem-vindo"
+msgstr "Bem-vindo teste 1"
 
 #: geonode/templates/index.html:21
 msgid ""
