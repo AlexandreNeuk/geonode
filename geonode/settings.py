@@ -92,6 +92,7 @@ DATABASE_URL = os.getenv(
 )
 
 # DATABASE_URL = 'postgresql://test_geonode:test_geonode@localhost:5432/geonode'
+DATABASE_URL = 'postgresql://postgres:__geoinfo__@192.168.157.18:5433/cnpm_geonode'
 
 # Defines settings for development
 
