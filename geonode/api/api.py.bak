@@ -49,11 +49,6 @@ from geonode.base.models import ResourceBase
 from geonode.base.models import TopicCategory
 from geonode.base.models import Region
 from geonode.base.models import HierarchicalKeyword
-
-# embrapa #
-
-from geonode.base.models import Embrapa_Keywords
-
 from geonode.base.models import ThesaurusKeywordLabel
 from geonode.layers.models import Layer, Style
 from geonode.maps.models import Map
@@ -169,36 +164,6 @@ class TagResource(TypeFilteredResource):
     class Meta:
         queryset = HierarchicalKeyword.objects.all().order_by('name')
         resource_name = 'keywords'
-        allowed_methods = ['get']
-        filtering = {
-            'slug': ALL,
-        }
-        serializer = CountJSONSerializer()
-        authorization = ApiLockdownAuthorization()
-
-# embrapa #
-class EmbrapaTagResource(TypeFilteredResource):
-    """Tags api"""
-
-    #print("TESTE NA API EMBRAPATAGRESOURCE")
-
-    def serialize(self, request, data, format, options=None):
-        #print("TESTE NA API EMBRAPATAGRESOURCE OPTIONS")
-        #print(options)
-        if options is None:
-            options = {}
-        options['count_type'] = 'embrapa_keywords'
-
-        #print("TESTE NA API EMBRAPATAGRESOURCE2")
-        #print(options['count_type'])
-
-        return super(EmbrapaTagResource, self).serialize(request, data, format, options)
-
-    class Meta:
-        #print("TESTE NA API EMBRAPATAGRESOURCE3")
-        queryset = Embrapa_Keywords.objects.all().order_by('name')
-        #print(queryset)
-        resource_name = 'embrapa_keywords'
         allowed_methods = ['get']
         filtering = {
             'slug': ALL,
