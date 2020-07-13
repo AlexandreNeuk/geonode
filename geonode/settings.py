@@ -36,12 +36,24 @@ from django.conf.global_settings import DATETIME_INPUT_FORMATS
 from geonode import get_version
 from kombu import Queue, Exchange
 
+from django_auth_ldap import config as ldap_config
+#from geonode_ldap.config import GeonodeNestedGroupOfNamesType
+import ldap
+
 SILENCED_SYSTEM_CHECKS = [
     '1_8.W001',
     'fields.W340',
     'auth.W004',
     'urls.W002'
 ]
+
+# Embrapa Unity
+
+EMBRAPA_UNITY_DEFAULT = '96'
+ACAO_GERENCIAL_API = False
+PROJETO_API = False
+FILTRO_AUTOR = 'Andre'
+FILTRO_DATA = 'abobrinha'
 
 # GeoNode Version
 VERSION = get_version()
@@ -74,7 +86,6 @@ if EMAIL_ENABLE:
     EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER', '')
     EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD', '')
     EMAIL_USE_TLS = ast.literal_eval(os.getenv('DJANGO_EMAIL_USE_TLS', 'False'))
-    EMAIL_USE_SSL = ast.literal_eval(os.getenv('DJANGO_EMAIL_USE_SSL', 'False'))
     DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'GeoNode <no-reply@geonode.org>')
 else:
     EMAIL_BACKEND = os.getenv('DJANGO_EMAIL_BACKEND',
@@ -84,14 +95,14 @@ else:
 _DEFAULT_SECRET_KEY = 'myv-y4#7j-d*p-__@j#*3z@!y24fz8%^z2v6atuy4bo9vqr1_a'
 SECRET_KEY = os.getenv('SECRET_KEY', _DEFAULT_SECRET_KEY)
 
-DATABASE_URL = os.getenv(
-    'DATABASE_URL',
-    'sqlite:///{path}'.format(
-        path=os.path.join(PROJECT_ROOT, 'development.db')
-    )
-)
+#DATABASE_URL = os.getenv(
+    #'DATABASE_URL',
+    #'sqlite:///{path}'.format(
+        #path=os.path.join(PROJECT_ROOT, 'development.db')
+    #)
+#)
 
-# DATABASE_URL = 'postgresql://test_geonode:test_geonode@localhost:5432/geonode'
+DATABASE_URL = 'postgresql://postgres:__geoinfo__@192.168.157.18:5433/cnpm_geonode'
 
 # Defines settings for development
 
@@ -156,7 +167,7 @@ USE_L10N = ast.literal_eval(os.getenv('USE_I18N', 'True'))
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', "en")
 
-_DEFAULT_LANGUAGES = """(
+_DEFAULT_LANGUAGES = (
     ('af', 'Afrikaans'),
     ('sq', 'Albanian'),
     ('am', 'Amharic'),
@@ -188,9 +199,9 @@ _DEFAULT_LANGUAGES = """(
     ('zh-cn', '中文'),
     ('ja', '日本語'),
     ('ko', '한국어'),
-)"""
+)
 
-LANGUAGES = ast.literal_eval(os.getenv('LANGUAGES', _DEFAULT_LANGUAGES))
+LANGUAGES = os.getenv('LANGUAGES', _DEFAULT_LANGUAGES)
 
 EXTRA_LANG_INFO = {
     'am': {
@@ -365,7 +376,6 @@ GEONODE_CORE_APPS = (
     # GeoNode internal apps
     'geonode.api',
     'geonode.base',
-    'geonode.br',
     'geonode.layers',
     'geonode.maps',
     'geonode.documents',
@@ -407,15 +417,19 @@ GEONODE_APPS = GEONODE_CORE_APPS + GEONODE_INTERNAL_APPS + GEONODE_CONTRIB_APPS
 
 INSTALLED_APPS = (
 
+
     # Boostrap admin theme
     # 'django_admin_bootstrapped.bootstrap3',
     # 'django_admin_bootstrapped',
+
+    # Bootstrap modal forms
+    #'bootstrap_modal_forms',
 
     # Apps bundled with Django
     'modeltranslation',
     'dal',
     'dal_select2',
-    'grappelli',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -437,7 +451,6 @@ INSTALLED_APPS = (
     'mptt',
     'storages',
     'floppyforms',
-    'tinymce',
 
     # Theme
     'django_forms_bootstrap',
@@ -454,6 +467,7 @@ INSTALLED_APPS = (
     'guardian',
     'oauth2_provider',
     'corsheaders',
+
     'invitations',
 
     # login with external providers
@@ -477,8 +491,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
-
-GRAPPELLI_ADMIN_TITLE = os.getenv('GRAPPELLI_ADMIN_TITLE', 'GeoNode')
 
 # Documents application
 try:
@@ -511,7 +523,7 @@ if UNOCONV_ENABLE:
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d '
@@ -528,7 +540,7 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'ERROR',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
@@ -542,7 +554,7 @@ LOGGING = {
         "django": {
             "handlers": ["console"], "level": "ERROR", },
         "geonode": {
-            "handlers": ["console"], "level": "ERROR", },
+            "handlers": ["console"], "level": "INFO", },
         "geonode.qgis_server": {
             "handlers": ["console"], "level": "ERROR", },
         "geoserver-restconfig.catalog": {
@@ -552,7 +564,7 @@ LOGGING = {
         "pycsw": {
             "handlers": ["console"], "level": "ERROR", },
         "celery": {
-            'handlers': ["console"], 'level': 'ERROR', },
+            "handlers": ["console"], "level": "ERROR", },
     },
 }
 
@@ -643,8 +655,6 @@ MIDDLEWARE = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'oauth2_provider.middleware.OAuth2TokenMiddleware',
-    'geonode.base.middleware.MaintenanceMiddleware',
-    'geonode.base.middleware.ReadOnlyMiddleware',   # a Middleware enabling Read Only mode of Geonode
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
@@ -669,6 +679,15 @@ SECURE_SSL_REDIRECT = ast.literal_eval(os.environ.get('SECURE_SSL_REDIRECT', 'Fa
 SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', '3600'))
 SECURE_HSTS_INCLUDE_SUBDOMAINS = ast.literal_eval(os.environ.get('SECURE_HSTS_INCLUDE_SUBDOMAINS', 'True'))
 
+LDAP_SERVER_URL = "ldap://embrapa.net"
+LDAP_BIND_DN = "CN=GeoInfo,OU=Sistemas,DC=embrapa,DC=net"
+LDAP_BIND_PASSWORD = "G301nf0"
+LDAP_USER_SEARCH_DN = "DC=embrapa,DC=net"
+LDAP_USER_SEARCH_FILTERSTR = "(&(objectCategory=person)(objectClass=user)(sAMAccountName=%(user)s))"
+LDAP_GROUP_SEARCH_DN = "CN=GeoInfo_Sistema,OU=Sistemas,DC=embrapa,DC=net"
+LDAP_GROUP_PROFILE_MEMBER_ATTR = "uniqueMember"
+LDAP_USER_SEARCH_FILTERSTR = "(&(sAMAccountName=%(user)s)(objectClass=user))"
+
 # Replacement of the default authentication backend in order to support
 # permissions per object.
 AUTHENTICATION_BACKENDS = (
@@ -676,7 +695,39 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'guardian.backends.ObjectPermissionBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
+    "geonode_ldap.backend.GeonodeLdapBackend"
 )
+
+# django_auth_ldap configuration
+AUTH_LDAP_SERVER_URI = os.getenv("LDAP_SERVER_URL")
+AUTH_LDAP_BIND_DN = os.getenv("LDAP_BIND_DN")
+AUTH_LDAP_BIND_PASSWORD = os.getenv("LDAP_BIND_PASSWORD")
+AUTH_LDAP_USER_SEARCH = ldap_config.LDAPSearch(
+    os.getenv("LDAP_USER_SEARCH_DN"),
+    ldap.SCOPE_SUBTREE,
+    os.getenv("LDAP_USER_SEARCH_FILTERSTR")
+)
+AUTH_LDAP_GROUP_SEARCH = ldap_config.LDAPSearch(
+    os.getenv("LDAP_GROUP_SEARCH_DN"),
+    ldap.SCOPE_SUBTREE,
+    os.getenv("LDAP_GROUP_SEARCH_FILTERSTR")
+)
+#AUTH_LDAP_GROUP_TYPE = GeonodeNestedGroupOfNamesType()
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mailPrimaryAddress"
+}
+AUTH_LDAP_FIND_GROUP_PERMS = True
+AUTH_LDAP_MIRROR_GROUPS_EXCEPT = [
+    "test_group"
+]
+
+# these are not needed by django_auth_ldap - we use them to find and match
+# GroupProfiles and GroupCategories
+GEONODE_LDAP_GROUP_NAME_ATTRIBUTE = os.getenv("LDAP_GROUP_NAME_ATTRIBUTE", default="cn")
+GEONODE_LDAP_GROUP_PROFILE_FILTERSTR = os.getenv("LDAP_GROUP_SEARCH_FILTERSTR", default='(ou=research group)')
+GEONODE_LDAP_GROUP_PROFILE_MEMBER_ATTR = os.getenv("LDAP_GROUP_PROFILE_MEMBER_ATTR", default='member')
 
 if 'announcements' in INSTALLED_APPS:
     AUTHENTICATION_BACKENDS += (
@@ -889,7 +940,7 @@ GEOFENCE_SECURITY_ENABLED = False if TEST and not INTEGRATION else ast.literal_e
 # OGC (WMS/WFS/WCS) Server Settings
 OGC_SERVER = {
     'default': {
-        'BACKEND': os.getenv('BACKEND', 'geonode.geoserver'),
+        'BACKEND': 'geonode.geoserver',
         'LOCATION': GEOSERVER_LOCATION,
         'WEB_UI_LOCATION': GEOSERVER_WEB_UI_LOCATION,
         'LOGIN_ENDPOINT': 'j_spring_oauth2_geonode_login',
@@ -907,7 +958,7 @@ OGC_SERVER = {
         'GEOFENCE_URL': os.getenv('GEOFENCE_URL', 'internal:/'),
         'WMST_ENABLED': ast.literal_eval(os.getenv('WMST_ENABLED', 'False')),
         'BACKEND_WRITE_ENABLED': ast.literal_eval(os.getenv('BACKEND_WRITE_ENABLED', 'True')),
-        'WPS_ENABLED': ast.literal_eval(os.getenv('WPS_ENABLED', 'False')),
+        'WPS_ENABLED': ast.literal_eval(os.getenv('WPS_ENABLED', 'True')),
         'LOG_FILE': '%s/geoserver/data/logs/geoserver.log'
         % os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir)),
         # Set to name of database in DATABASES dictionary to enable
@@ -1123,7 +1174,7 @@ try:
     ALLOWED_HOSTS = ast.literal_eval(os.getenv('ALLOWED_HOSTS'))
 except ValueError:
     # fallback to regular list of values separated with misc chars
-    ALLOWED_HOSTS = [HOSTNAME, 'localhost', 'django', 'geonode'] if os.getenv('ALLOWED_HOSTS') is None \
+    ALLOWED_HOSTS = [HOSTNAME, 'localhost', 'django', 'geonode', '192.168.15.83', '192.168.15.124','192.168.15.157','hdnembrapa.ddns.net','hdnembrapa.ddns.net:8000'] if os.getenv('ALLOWED_HOSTS') is None \
         else re.split(r' *[,|:|;] *', os.getenv('ALLOWED_HOSTS'))
 
 # AUTH_IP_WHITELIST property limits access to users/groups REST endpoints
@@ -1217,20 +1268,6 @@ AUTO_GENERATE_AVATAR_SIZES = (
 )
 AVATAR_GRAVATAR_SSL = ast.literal_eval(os.getenv('AVATAR_GRAVATAR_SSL', 'False'))
 
-AVATAR_DEFAULT_URL = os.getenv('AVATAR_DEFAULT_URL', '/geonode/img/avatar.png')
-
-try:
-    # try to parse python notation, default in dockerized env
-    AVATAR_PROVIDERS = ast.literal_eval(os.getenv('AVATAR_PROVIDERS'))
-except ValueError:
-    # fallback to regular list of values separated with misc chars
-    AVATAR_PROVIDERS = (
-    'avatar.providers.PrimaryAvatarProvider',
-    'avatar.providers.GravatarAvatarProvider',
-    'avatar.providers.DefaultAvatarProvider'
-   ) if os.getenv('AVATAR_PROVIDERS') is None \
-        else re.split(r' *[,|:|;] *', os.getenv('AVATAR_PROVIDERS'))
-
 # Number of results per page listed in the GeoNode search pages
 CLIENT_RESULTS_LIMIT = int(os.getenv('CLIENT_RESULTS_LIMIT', '5'))
 
@@ -1243,6 +1280,9 @@ API_LOCKDOWN = ast.literal_eval(
 API_LIMIT_PER_PAGE = int(os.getenv('API_LIMIT_PER_PAGE', '200'))
 API_INCLUDE_REGIONS_COUNT = ast.literal_eval(
     os.getenv('API_INCLUDE_REGIONS_COUNT', 'False'))
+
+# option to enable/disable resource unpublishing for administrators
+RESOURCE_PUBLISHING = ast.literal_eval(os.getenv('RESOURCE_PUBLISHING', 'False'))
 
 # Settings for EXIF plugin
 EXIF_ENABLED = ast.literal_eval(os.getenv('EXIF_ENABLED', 'True'))
@@ -1311,6 +1351,88 @@ GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY = os.getenv('GEONODE_CLIENT_LAYER_PREVIEW_L
 MAP_BASELAYERS = [{}]
 
 """
+To enable the GeoExt based Client:
+1. pip install django-geoexplorer==4.0.42
+2. add 'geoexplorer' to INSTALLED_APPS
+3. enable those:
+"""
+# GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY = 'geoext'  # DEPRECATED use HOOKSET instead
+if GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY == 'geoext':
+    GEONODE_CLIENT_HOOKSET = os.getenv('GEONODE_CLIENT_HOOKSET', 'geonode.client.hooksets.GeoExtHookSet')
+
+    if 'geoexplorer' not in INSTALLED_APPS:
+        INSTALLED_APPS += ('geoexplorer', )
+
+    MAP_BASELAYERS += [{
+            "source": {"ptype": "gxp_olsource"},
+            "type": "OpenLayers.Layer",
+            "args": ["No background"],
+            "name": "background",
+            "visibility": False,
+            "fixed": True,
+            "group": "background"
+        },
+        {
+            "source": {"ptype": "gxp_osmsource"},
+            "type": "OpenLayers.Layer.OSM",
+            "name": "mapnik",
+            "visibility": True,
+            "fixed": True,
+            "group": "background"
+        }]
+
+    # MAP_BASELAYERS += [
+    # {
+    #     "source": {"ptype": "gxp_olsource"},
+    #     "type": "OpenLayers.Layer.XYZ",
+    #     "title": "TEST TILE",
+    #     "args": ["TEST_TILE", "http://test_tiles/tiles/${z}/${x}/${y}.png"],
+    #     "name": "background",
+    #     "attribution": "&copy; TEST TILE",
+    #     "visibility": False,
+    #     "fixed": True,
+    #     "group":"background"
+    # }]
+
+    if BING_API_KEY:
+        BASEMAP = {
+            'source': {
+                'ptype': 'gxp_bingsource',
+                'apiKey': BING_API_KEY
+            },
+            'name': 'AerialWithLabels',
+            'fixed': True,
+            'visibility': True,
+            'group': 'background'
+        }
+        MAP_BASELAYERS.append(BASEMAP)
+
+    if GOOGLE_API_KEY:
+        BASEMAP = {
+            'source': {
+                 'ptype': 'gxp_googlesource',
+                 'apiKey': GOOGLE_API_KEY
+            },
+            'name': 'SATELLITE',
+            'fixed': True,
+            'visibility': True,
+            'group': 'background'
+        }
+        MAP_BASELAYERS.append(BASEMAP)
+
+    if USE_GEOSERVER:
+        LOCAL_GEOSERVER = {
+            "source": {
+                "ptype": "gxp_wmscsource",
+                "url": OGC_SERVER['default']['PUBLIC_LOCATION'] + "wms",
+                "restUrl": "/gs/rest"
+            }
+        }
+        baselayers = MAP_BASELAYERS
+        MAP_BASELAYERS = [LOCAL_GEOSERVER]
+        MAP_BASELAYERS.extend(baselayers)
+
+"""
 To enable the REACT based Client:
 1. pip install pip install django-geonode-client==1.0.9
 2. enable those:
@@ -1328,68 +1450,72 @@ To enable the Leaflet based Client:
 if GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY == 'leaflet':
     GEONODE_CLIENT_HOOKSET = os.getenv('GEONODE_CLIENT_HOOKSET', 'geonode.client.hooksets.LeafletHookSet')
 
-    LEAFLET_CONFIG = {
-        'TILES': [
-            # Find tiles at:
-            # http://leaflet-extras.github.io/leaflet-providers/preview/
+    CORS_ORIGIN_WHITELIST = (
+        HOSTNAME
+    )
 
-            # Stamen toner lite.
-            ('Watercolor',
-                'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png',
-                'Map tiles by <a href="http://stamen.com">Stamen Design</a>, \
-                <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> \
-                &mdash; Map data &copy; \
-                <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, \
-                <a href="http://creativecommons.org/licenses/by-sa/2.0/"> \
-                CC-BY-SA</a>'),
-            ('Toner Lite',
-                'http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png',
-                'Map tiles by <a href="http://stamen.com">Stamen Design</a>, \
-                <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> \
-                &mdash; Map data &copy; \
-                <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, \
-                <a href="http://creativecommons.org/licenses/by-sa/2.0/"> \
-                CC-BY-SA</a>'),
-        ],
-        'PLUGINS': {
-            'esri-leaflet': {
-                'js': 'lib/js/leaflet.js',
-                'auto-include': True,
-            },
-            'leaflet-fullscreen': {
-                'css': 'lib/css/leaflet.fullscreen.css',
-                'js': 'lib/js/Leaflet.fullscreen.min.js',
-                'auto-include': True,
-            },
-            'leaflet-opacity': {
-                'css': 'lib/css/L.Control.Opacity.css',
-                'js': 'lib/js/L.Control.Opacity.js',
-                'auto-include': True,
-            },
-            'leaflet-navbar': {
-                'css': 'lib/css/Leaflet.NavBar.css',
-                'js': 'lib/js/index.js',
-                'auto-include': True,
-            },
-            'leaflet-measure': {
-                'css': 'lib/css/leaflet-measure.css',
-                'js': 'lib/js/leaflet-measure.js',
-                'auto-include': True,
-            },
+LEAFLET_CONFIG = {
+    'TILES': [
+        # Find tiles at:
+        # http://leaflet-extras.github.io/leaflet-providers/preview/
+
+        # Stamen toner lite.
+        ('Watercolor',
+            'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png',
+            'Map tiles by <a href="http://stamen.com">Stamen Design</a>, \
+            <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> \
+            &mdash; Map data &copy; \
+            <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, \
+            <a href="http://creativecommons.org/licenses/by-sa/2.0/"> \
+            CC-BY-SA</a>'),
+        ('Toner Lite',
+            'http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png',
+            'Map tiles by <a href="http://stamen.com">Stamen Design</a>, \
+            <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> \
+            &mdash; Map data &copy; \
+            <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, \
+            <a href="http://creativecommons.org/licenses/by-sa/2.0/"> \
+            CC-BY-SA</a>'),
+    ],
+    'PLUGINS': {
+        'esri-leaflet': {
+            'js': 'lib/js/leaflet.js',
+            'auto-include': True,
         },
-        'SRID': 3857,
-        'RESET_VIEW': False
-    }
+        'leaflet-fullscreen': {
+            'css': 'lib/css/leaflet.fullscreen.css',
+            'js': 'lib/js/Leaflet.fullscreen.min.js',
+            'auto-include': True,
+        },
+        'leaflet-opacity': {
+            'css': 'lib/css/L.Control.Opacity.css',
+            'js': 'lib/js/L.Control.Opacity.js',
+            'auto-include': True,
+        },
+        'leaflet-navbar': {
+            'css': 'lib/css/Leaflet.NavBar.css',
+            'js': 'lib/js/index.js',
+            'auto-include': True,
+        },
+        'leaflet-measure': {
+            'css': 'lib/css/leaflet-measure.css',
+            'js': 'lib/js/leaflet-measure.js',
+            'auto-include': True,
+        },
+    },
+    'SRID': 3857,
+    'RESET_VIEW': False
+}
 
-    if not DEBUG_STATIC:
-        # if not DEBUG_STATIC, use minified css and js
-        LEAFLET_CONFIG['PLUGINS'] = {
-            'leaflet-plugins': {
-                'js': 'lib/js/leaflet-plugins.min.js',
-                'css': 'lib/css/leaflet-plugins.min.css',
-                'auto-include': True,
-            }
+if not DEBUG_STATIC:
+    # if not DEBUG_STATIC, use minified css and js
+    LEAFLET_CONFIG['PLUGINS'] = {
+        'leaflet-plugins': {
+            'js': 'lib/js/leaflet-plugins.min.js',
+            'css': 'lib/css/leaflet-plugins.min.css',
+            'auto-include': True,
         }
+    }
 
 """
 To enable the MapStore2 REACT based Client:
@@ -1403,6 +1529,9 @@ if GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY == 'mapstore':
         INSTALLED_APPS += (
             'mapstore2_adapter',
             'geonode_mapstore_client',)
+
+    # This must be set to True in case you run the client in DEBUG mode with `npm run start`
+    MAPSTORE_DEBUG = False
 
     def get_geonode_catalogue_service():
         if PYCSW:
@@ -1478,19 +1607,6 @@ if GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY == 'mapstore':
             "visibility": False,
             "args": ["Empty Background", {"visibility": False}]
        }
-       # Custom XYZ Tile Provider
-        # {
-        #     "type": "tileprovider",
-        #     "title": "Title",
-        #     "provider": "custom", // or undefined
-        #     "name": "Name",
-        #     "group": "background",
-        #     "visibility": false,
-        #     "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        #     "options": {
-        #         "subdomains": [ "a", "b"]
-        #     }
-        # }
     ]
 
     if MAPBOX_ACCESS_TOKEN:
@@ -1538,50 +1654,6 @@ SEARCH_FILTERS = {
     'EXTENT_ENABLED': True,
     'GROUPS_ENABLED': True,
     'GROUP_CATEGORIES_ENABLED': True,
-}
-
-# HTML WYSIWYG Editor (TINYMCE) Menu Bar Settings
-TINYMCE_DEFAULT_CONFIG = {
-    "selector": "textarea#id_resource-featureinfo_custom_template",
-    "theme": "silver",
-    "height": 500,
-    "plugins": 'print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
-    "imagetools_cors_hosts": ['picsum.photos'],
-    "menubar": 'file edit view insert format tools table help',
-    "toolbar": 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save | insertfile image media template link anchor codesample | ltr rtl',
-    "toolbar_sticky": "true",
-    "autosave_ask_before_unload": "true",
-    "autosave_interval": "30s",
-    "autosave_prefix": "{path}{query}-{id}-",
-    "autosave_restore_when_empty": "false",
-    "autosave_retention": "2m",
-    "image_advtab": "true",
-    "content_css": '//www.tiny.cloud/css/codepen.min.css',
-    "importcss_append": "true",
-    "image_caption": "true",
-    "quickbars_selection_toolbar": 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-    "noneditable_noneditable_class": "mceNonEditable",
-    "toolbar_mode": 'sliding',
-    "contextmenu": "link image imagetools table",
-    "templates": [
-        {
-            "title": 'New Table',
-            "description": 'creates a new table',
-            "content": '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"> </th></tr><tr><td> </td><td> </td></tr></table></div>'
-        },
-        {
-            "title": 'Starting my story',
-            "description": 'A cure for writers block',
-            "content": 'Once upon a time...'
-        },
-        {
-            "title": 'New list with dates',
-            "description": 'New List with dates',
-            "content": '<div class="mceTmpl"><span class="cdate">cdate</span><br /><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>'
-        }
-    ],
-    "template_cdate_format": '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
-    "template_mdate_format": '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
 }
 
 # Make Free-Text Kaywords writable from users or read-only
@@ -1663,14 +1735,13 @@ else:
 
 CELERY_BROKER_URL = os.environ.get('BROKER_URL', _BROKER_URL)
 CELERY_RESULT_PERSISTENT = ast.literal_eval(os.environ.get('CELERY_RESULT_PERSISTENT', 'False'))
-CELERY_IGNORE_RESULT = ast.literal_eval(os.environ.get('CELERY_IGNORE_RESULT', 'False'))
 
 # Allow to recover from any unknown crash.
 CELERY_ACKS_LATE = ast.literal_eval(os.environ.get('CELERY_ACKS_LATE', 'True'))
 
 # Set this to False in order to run async
-CELERY_TASK_ALWAYS_EAGER = ast.literal_eval(os.environ.get('CELERY_TASK_ALWAYS_EAGER', 'True'))
-CELERY_TASK_EAGER_PROPAGATES = ast.literal_eval(os.environ.get('CELERY_TASK_EAGER_PROPAGATES', 'True'))
+CELERY_TASK_ALWAYS_EAGER = ast.literal_eval(os.environ.get('CELERY_TASK_ALWAYS_EAGER', 'False' if ASYNC_SIGNALS else 'True'))
+CELERY_TASK_EAGER_PROPAGATES = ast.literal_eval(os.environ.get('CELERY_TASK_EAGER_PROPAGATES', 'False' if ASYNC_SIGNALS else 'True'))
 CELERY_TASK_IGNORE_RESULT = ast.literal_eval(os.environ.get('CELERY_TASK_IGNORE_RESULT', 'True'))
 
 # I use these to debug kombu crashes; we get a more informative message.
@@ -1785,33 +1856,6 @@ if os.name == 'nt':
 # Filter: (boolean, optional, default false) a filter option on that thesaurus will appear in the main search page
 # THESAURUS = {'name': 'inspire_themes', 'required': True, 'filter': True}
 
-# ######################################################## #
-# Advanced Resource Publishing Worklow Settings - START    #
-# ######################################################## #
-"""
-    - if [ RESOURCE_PUBLISHING == True ]
-      By default the uploaded resources will be "unpublished".
-      The owner will be able to change them to "published" **UNLESS** the ADMIN_MODERATE_UPLOADS is activated.
-      If the owner assigns unpublished resources to a Group, both from Metadata and Permissions, in any case
-       the Group "Managers" will be able to edit the Resource.
-
-    - if [ ADMIN_MODERATE_UPLOADS == True ]
-      1. The owner won't be able to change to neither "approved" nor "published" state (unless he is a superuser)
-      2. If the Resource belongs to a Group somehow, the Managers will be able to change the state to "approved"
-         but **NOT** to "published". Only a superuser can publish a resource.
-      3. Superusers can do enything.
-
-    - if [ GROUP_PRIVATE_RESOURCES == True ]
-      The "unapproved" and "unpublished" Resources will be accessible **ONLY** by owners, superusers and member of 
-       the belonging groups.
-
-    - if [ GROUP_MANDATORY_RESOURCES == True ]
-      Editor will be **FORCED** to select a Group when editing the resource metadata.
-"""
-
-# option to enable/disable resource unpublishing for administrators
-RESOURCE_PUBLISHING = ast.literal_eval(os.getenv('RESOURCE_PUBLISHING', 'False'))
-
 # Each uploaded Layer must be approved by an Admin before becoming visible
 ADMIN_MODERATE_UPLOADS = ast.literal_eval(os.environ.get('ADMIN_MODERATE_UPLOADS', 'False'))
 
@@ -1822,9 +1866,6 @@ GROUP_PRIVATE_RESOURCES = ast.literal_eval(os.environ.get('GROUP_PRIVATE_RESOURC
 # If this option is enabled, Groups will become strictly Mandatory on
 # Metadata Wizard
 GROUP_MANDATORY_RESOURCES = ast.literal_eval(os.environ.get('GROUP_MANDATORY_RESOURCES', 'False'))
-# ######################################################## #
-# Advanced Resource Publishing Worklow Settings - END      #
-# ######################################################## #
 
 # A boolean which specifies wether to display the email in user's profile
 SHOW_PROFILE_EMAIL = ast.literal_eval(os.environ.get('SHOW_PROFILE_EMAIL', 'False'))
@@ -1840,15 +1881,12 @@ ACCOUNT_APPROVAL_REQUIRED = ast.literal_eval(
     os.getenv('ACCOUNT_APPROVAL_REQUIRED', 'False')
 )
 ACCOUNT_ADAPTER = 'geonode.people.adapters.LocalAccountAdapter'
-ACCOUNT_AUTHENTICATION_METHOD = os.environ.get('ACCOUNT_AUTHENTICATION_METHOD', 'username_email')
 ACCOUNT_CONFIRM_EMAIL_ON_GET = ast.literal_eval(os.environ.get('ACCOUNT_CONFIRM_EMAIL_ON_GET', 'True'))
 ACCOUNT_EMAIL_REQUIRED = ast.literal_eval(os.environ.get('ACCOUNT_EMAIL_REQUIRED', 'True'))
-ACCOUNT_EMAIL_VERIFICATION = os.environ.get('ACCOUNT_EMAIL_VERIFICATION', 'none')
+ACCOUNT_EMAIL_VERIFICATION = os.environ.get('ACCOUNT_EMAIL_VERIFICATION', 'optional')
 
 SOCIALACCOUNT_ADAPTER = 'geonode.people.adapters.SocialAccountAdapter'
-SOCIALACCOUNT_AUTO_SIGNUP = ast.literal_eval(os.environ.get('SOCIALACCOUNT_AUTO_SIGNUP', 'True'))
-#This will hide or show local registration form in allauth view. True will show form
-SOCIALACCOUNT_WITH_GEONODE_LOCAL_SINGUP = strtobool(os.environ.get('SOCIALACCOUNT_WITH_GEONODE_LOCAL_SINGUP', 'True'))
+SOCIALACCOUNT_AUTO_SIGNUP = False
 
 # Uncomment this to enable Linkedin and Facebook login
 # INSTALLED_APPS += (
@@ -1938,7 +1976,7 @@ MONITORING_HOST_NAME = os.getenv("MONITORING_HOST_NAME", HOSTNAME)
 MONITORING_SERVICE_NAME = os.getenv("MONITORING_SERVICE_NAME", 'geonode')
 
 # how long monitoring data should be stored
-MONITORING_DATA_TTL = timedelta(days=int(os.getenv("MONITORING_DATA_TTL", 365)))
+MONITORING_DATA_TTL = timedelta(days=int(os.getenv("MONITORING_DATA_TTL", 7)))
 
 # this will disable csrf check for notification config views,
 # use with caution - for dev purpose only
@@ -1974,13 +2012,11 @@ if MONITORING_ENABLED:
 
     CELERY_BEAT_SCHEDULE['collect_metrics'] = {
         'task': 'geonode.monitoring.tasks.collect_metrics',
-        'schedule': 60.0,
+        'schedule': 600.0,
     }
 
 USER_ANALYTICS_ENABLED = ast.literal_eval(os.getenv('USER_ANALYTICS_ENABLED', 'False'))
 USER_ANALYTICS_GZIP = ast.literal_eval(os.getenv('USER_ANALYTICS_GZIP', 'False'))
 
 GEOIP_PATH = os.getenv('GEOIP_PATH', os.path.join(PROJECT_ROOT, 'GeoIPCities.dat'))
-#This controls if tastypie search on resourches is performed only with titles
-SEARCH_RESOURCES_EXTENDED = strtobool(os.getenv('SEARCH_RESOURCES_EXTENDED', 'True'))
 # -- END Settings for MONITORING plugin

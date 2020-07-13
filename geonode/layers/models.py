@@ -29,12 +29,9 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
-
-from pinax.ratings.models import OverallRating
-from tinymce.models import HTMLField
-
-from geonode.base.models import ResourceBase, ResourceBaseManager, resourcebase_post_save
+from geonode.base.models import (ResourceBase, ResourceBaseManager, resourcebase_post_save)
 from geonode.people.utils import get_valid_user
+from pinax.ratings.models import OverallRating
 from geonode.utils import check_shp_columnnames
 from geonode.security.models import PermissionLevelMixin
 from geonode.security.utils import remove_object_permissions
@@ -153,13 +150,6 @@ class Layer(ResourceBase):
     Layer (inherits ResourceBase fields)
     """
 
-    PERMISSIONS = {
-        'write': [
-            'change_layer_data',
-            'change_layer_style',
-        ]
-    }
-
     # internal fields
     objects = LayerManager()
     workspace = models.CharField(_('Workspace'), max_length=128)
@@ -192,18 +182,6 @@ class Layer(ResourceBase):
 
     upload_session = models.ForeignKey(UploadSession, blank=True, null=True, on_delete=models.CASCADE)
 
-    use_featureinfo_custom_template = models.BooleanField(
-        _('use featureinfo custom template?'),
-        help_text=_('specifies wether or not use a custom GetFeatureInfo template.'),
-        default=False
-    )
-    featureinfo_custom_template = HTMLField(
-        _('featureinfo custom template'),
-        help_text=_('the custom GetFeatureInfo template HTML contents.'),
-        unique=False,
-        blank=True,
-        null=True)
-
     def is_vector(self):
         return self.storeType == 'dataStore'
 
@@ -235,7 +213,7 @@ class Layer(ResourceBase):
 
     @property
     def ows_url(self):
-        if self.remote_service is not None and self.remote_service.method == INDEXED:
+        if self.remote_service is not None:
             result = self.remote_service.service_url
         else:
             result = "{base}ows".format(
@@ -271,10 +249,7 @@ class Layer(ResourceBase):
         """
 
         # If there was no upload_session return None
-        try:
-            if self.upload_session is None:
-                return None, None
-        except Exception:
+        if self.upload_session is None:
             return None, None
 
         base_exts = [x.replace('.', '') for x in cov_exts + vec_exts]
@@ -317,14 +292,9 @@ class Layer(ResourceBase):
         visible_attributes = self.attribute_set.visible()
         if (visible_attributes.count() > 0):
             cfg["getFeatureInfo"] = {
-                "fields": [lyr.attribute for lyr in visible_attributes],
-                "propertyNames": dict([(lyr.attribute, lyr.attribute_label) for lyr in visible_attributes]),
-                "displayTypes": dict([(lyr.attribute, lyr.featureinfo_type) for lyr in visible_attributes])
+                "fields": [l.attribute for l in visible_attributes],
+                "propertyNames": dict([(l.attribute, l.attribute_label) for l in visible_attributes])
             }
-
-        if self.use_featureinfo_custom_template:
-            cfg["ftInfoTemplate"] = self.featureinfo_custom_template
-
         return cfg
 
     def __str__(self):
@@ -444,47 +414,8 @@ class Attribute(models.Model):
         _('visible?'),
         help_text=_('specifies if the attribute should be displayed in identify results'),
         default=True)
-    display_order = models.IntegerField(
-        _('display order'),
-        help_text=_('specifies the order in which attribute should be displayed in identify results'),
-        default=1)
-
-    """
-    Attribute FeatureInfo-Type list
-    """
-    TYPE_PROPERTY = 'type_property'
-    TYPE_HREF = 'type_href'
-    TYPE_IMAGE = 'type_image'
-    TYPE_VIDEO_MP4 = 'type_video_mp4'
-    TYPE_VIDEO_OGG = 'type_video_ogg'
-    TYPE_VIDEO_WEBM = 'type_video_webm'
-    TYPE_VIDEO_3GP = 'type_video_3gp'
-    TYPE_VIDEO_FLV = 'type_video_flv'
-    TYPE_VIDEO_YOUTUBE = 'type_video_youtube'
-    TYPE_AUDIO = 'type_audio'
-    TYPE_IFRAME = 'type_iframe'
-
-    TYPES = ((TYPE_PROPERTY, _("Label"),),
-             (TYPE_HREF, _("URL"),),
-             (TYPE_IMAGE, _("Image",),),
-             (TYPE_VIDEO_MP4, _("Video (mp4)",),),
-             (TYPE_VIDEO_OGG, _("Video (ogg)",),),
-             (TYPE_VIDEO_WEBM, _("Video (webm)",),),
-             (TYPE_VIDEO_3GP, _("Video (3gp)",),),
-             (TYPE_VIDEO_FLV, _("Video (flv)",),),
-             (TYPE_VIDEO_YOUTUBE, _("Video (YouTube/VIMEO - embedded)",),),
-             (TYPE_AUDIO, _("Audio",),),
-             (TYPE_IFRAME, _("IFRAME",),),
-             )
-    featureinfo_type = models.CharField(
-        _('featureinfo type'),
-        help_text=_('specifies if the attribute should be rendered with an HTML widget on GetFeatureInfo template.'),
-        max_length=255,
-        unique=False,
-        blank=False,
-        null=False,
-        default=TYPE_PROPERTY,
-        choices=TYPES)
+    display_order = models.IntegerField(_('display order'), help_text=_(
+        'specifies the order in which attribute should be displayed in identify results'), default=1)
 
     # statistical derivations
     count = models.IntegerField(
@@ -551,7 +482,8 @@ class Attribute(models.Model):
 
     def __str__(self):
         return "{0}".format(
-            self.attribute_label if self.attribute_label else self.attribute)
+            self.attribute_label.encode(
+                "utf-8", "replace") if self.attribute_label else self.attribute.encode("utf-8", "replace"))
 
     def unique_values_as_list(self):
         return self.unique_values.split(',')

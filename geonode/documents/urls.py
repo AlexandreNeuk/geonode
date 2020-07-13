@@ -35,6 +35,9 @@ documents_list = register_url_event()(TemplateView.as_view(
         template_name='documents/document_list.html'))
 
 urlpatterns = [  # 'geonode.documents.views',
+    url(r'^add_declaracao_document$', views.add_declaracao_document, name='embrapa_declaracao_document'),
+    url(r'^add_autor_document$', views.add_autor_document, name='embrapa_add_teste_document'),
+    url(r'^save_finalidade$', views.save_finalidade_document, name='embrapa_save_finalidade'),
     url(r'^$',
         documents_list,
         {'facet_type': 'documents'},
@@ -62,6 +65,8 @@ urlpatterns = [  # 'geonode.documents.views',
         name='document_batch_metadata'),
     url(r'^(?P<docid>\d+)/metadata_advanced$', views.document_metadata_advanced,
         name='document_metadata_advanced'),
+    url(r'^(?P<docid>[^/]*)/thumb_upload$',
+        views.document_thumb_upload, name='document_thumb_upload'),
     url(r'^autocomplete/$',
         DocumentAutocomplete.as_view(), name='autocomplete_document'),
 ]

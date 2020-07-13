@@ -32,6 +32,20 @@ import json
 from geonode.utils import unzip_file
 from geonode.layers.models import Layer, Attribute
 
+# Embrapa#
+from geonode.base.models import Embrapa_Data_Quality_Statement, Embrapa_Authors
+
+class EmbrapaDataQualityStatementForm(forms.ModelForm):
+
+    class Meta:
+        model = Embrapa_Data_Quality_Statement
+        fields = ['name']
+
+class EmbrapaAuthorsForm(forms.ModelForm):
+
+    class Meta:
+        model = Embrapa_Authors
+        fields = ['name','autoria','afiliacao']
 
 class JSONField(forms.CharField):
 
@@ -112,7 +126,7 @@ class LayerUploadForm(forms.Form):
         dbf_file = shx_file = prj_file = xml_file = sld_file = None
         base_name = base_ext = None
         if zipfile.is_zipfile(cleaned["base_file"]):
-            filenames = zipfile.ZipFile(cleaned["base_file"], allowZip64=True).namelist()
+            filenames = zipfile.ZipFile(cleaned["base_file"]).namelist()
             for filename in filenames:
                 name, ext = os.path.splitext(filename)
                 if ext.lower() == '.shp':
@@ -194,11 +208,14 @@ class LayerUploadForm(forms.Form):
                         # overwrite as file.shp
                         if cleaned.get("sld_file"):
                             cleaned["sld_file"].name = '%s.sld' % base_name
+
         return cleaned
 
     def write_files(self):
+
         absolute_base_file = None
         tempdir = tempfile.mkdtemp()
+
         if zipfile.is_zipfile(self.cleaned_data['base_file']):
             absolute_base_file = unzip_file(self.cleaned_data['base_file'],
                                             '.shp', tempdir=tempdir)
