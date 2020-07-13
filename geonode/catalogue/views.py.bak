@@ -302,8 +302,6 @@ def csw_render_extra_format_txt(request, layeruuid, resname):
     content += 'resource owner' + s + fst(resource.owner) + sc
     content += 'date' + s + fst(resource.date) + sc
     content += 'date type' + s + fst(resource.date_type) + sc
-    # embrapa #
-    content += 'data criacao' + s + fst(resource.data_criacao) + sc
     content += 'abstract' + s + fst(resource.abstract) + sc
     content += 'edition' + s + fst(resource.edition) + sc
     content += 'purpose' + s + fst(resource.purpose) + sc

@@ -37,17 +37,13 @@ from geonode.base.utils import OwnerRightsRequestViewUtils
 from geonode.documents.models import Document
 from geonode.layers.models import Layer
 from geonode.maps.models import Map
-from geonode.base.models import ResourceBase, Region, HierarchicalKeyword, ThesaurusKeywordLabel, Embrapa_Keywords
+from geonode.base.models import ResourceBase, Region, HierarchicalKeyword, ThesaurusKeywordLabel
 from geonode.utils import resolve_object
 from geonode.security.utils import get_visible_resources
 from geonode.base.forms import BatchEditForm, OwnerRightsRequestForm
 from geonode.base.forms import CuratedThumbnailForm
 from geonode.notifications_helper import send_notification
 
-# embrapa #
-from django.db.models import Q
-from datetime import datetime
-from geonode.base.utils import get_last_update, choice_data_quality_statement, choice_authors, choice_unity, choice_purpose
 
 def batch_modify(request, ids, model):
     if not request.user.is_superuser:
@@ -195,98 +191,6 @@ class RegionAutocomplete(SimpleSelect2View):
 
 class HierarchicalKeywordAutocomplete(SimpleSelect2View):
     model = HierarchicalKeyword
-    filter_arg = 'slug__icontains'
-
-### embrapa ###
-'''
-class EmbrapaKeywordsAutocomplete(autocomplete.Select2QuerySetView):
-
-    def get_queryset(self):
-        search_fields = ['^name']
-
-        qs = Embrapa_Keywords.objects.all()
-
-        if self.q:
-            qs = qs.filter(name__icontains=self.q)
-
-        return qs
-'''
-#class Embrapa_PurposeAutocomplete(autocomplete.Select2QuerySetView):
-#    def get_queryset(self):
-#        search_fields = ['^title']
-
-        #form = BatchEditForm(request.GET)
-        # Verificar se isso da certo pra poder fazer o filtro tanto para ação gerencial quanto para projeto para separá-los
-        # Tentar alocar a chamada da api e o método de save aqui
-        # SE A DATA QUE É DE HOJE (MENOS) A DATA QUE VEIO DO BANCO É (MAIOR) QUE O TEMPO EM SEGUNDOS DE UM MÊS, 
-        # DAI ENTRA PRA SALVAR, SE NÃO, CONTINUA (E SE SALVAR DEPOIS DE UM TEMPO, ATUALIZAR A DATA DE SAVE COM UM UPDATE VIA DJANGO)
-        # Criar uma tabela pra salvar a data e atualizar ela quando for salvar a base de dados vindos da api
-        
-#        print("Teste no views.py do base - Purpose")
-#        print("Unidade no purpose:")
-#        print(settings.EMBRAPA_UNITY_DEFAULT)
-
-#        qs = Embrapa_Purpose.objects.all()
-
-#        if self.q:
-#            qs = qs.filter(Q(title__icontains=self.q) | Q(identifier__icontains=self.q) | Q(project_code__icontains=self.q))
-
-#        return qs
-
-class EmbrapaAuthorsAutocomplete(autocomplete.Select2GroupListView):
-    def get_list(self):
-
-        if not self.q:
-            print("Tá vazia")
-            embrapa_autores = None
-        else:
-            embrapa_autores = choice_authors()
-
-
-        print("Views autores:")
-
-        return embrapa_autores
-        #return [item[0][1] for item in embrapa_autores if item[0][1] == item[0][1]]
-
-
-class EmbrapaDataQualityStatementAutocomplete(autocomplete.Select2GroupListView):
-    def get_list(self):
-
-        embrapa_data_quality_statements = choice_data_quality_statement()
-
-        print("Views declaração da qualidade do dado:")
-
-        return embrapa_data_quality_statements
-
-class EmbrapaPurposeAutocomplete(autocomplete.Select2GroupListView):
-    def get_list(self):
-
-        embrapa_purposes = choice_purpose()
-
-        print("Unidade da Embrapa:")
-        print(settings.EMBRAPA_UNITY_DEFAULT)
-
-        return embrapa_purposes
-
-class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
-    def get_list(self):
-
-        embrapa_unities = choice_unity()
-
-        # Derrubar a tabela de embrapa_unities e embrapa_purpose, transforma-los em charfields na camada.
-        # E vai ser tupla mesmo, gerada pela lista retornada da api
-
-        print("self.q:")
-        print(self.q)
-
-        if self.q:
-            settings.EMBRAPA_UNITY_DEFAULT = self.q
-
-        return embrapa_unities
-
-class EmbrapaKeywordsAutocomplete(SimpleSelect2View):
-
-    model = Embrapa_Keywords
     filter_arg = 'slug__icontains'
 
 

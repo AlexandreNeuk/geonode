@@ -88,10 +88,6 @@ OWNER_PERMISSIONS = [
     'publish_resourcebase'
 ]
 
-# embrapa #
-
-from datetime import datetime
-
 if check_ogc_backend(geoserver.BACKEND_PACKAGE):
     # FIXME: The post service providing the map_status object
     # should be moved to geonode.geoserver.
@@ -107,15 +103,6 @@ logger = logging.getLogger('geonode.layers.utils')
 
 _separator = '\n' + ('-' * 100) + '\n'
 
-def get_only_year():
-
-    time = datetime.now()
-
-    format_time = str(time)
-
-    format_time = format_time[0:4]
-
-    return format_time
 
 def _clean_string(
         str,

@@ -17,6 +17,115 @@
 <script type="text/javascript" src="{% static "autocomplete_light/select2.js" %}"></script>
 <script type="text/javascript" src="{% static "autocomplete_light/jquery.post-setup.js" %}"></script>
 
+<script>
+
+function submitBtn(id){
+  var action = "{{ map.get_absolute_url }}/metadata";
+  var form = document.createElement('FORM');
+  form.setAttribute('action', action);
+  form.setAttribute('method', 'GET');
+  var btn_projeto_embrapa = document.createElement('INPUT');
+  btn_projeto_embrapa.setAttribute('type','submit');
+  btn_projeto_embrapa.setAttribute('id', 'btn_projeto_embrapa');
+  btn_projeto_embrapa.setAttribute('name', 'list_projects');
+  var btn_acao_gerencial_embrapa = document.createElement('INPUT');
+  btn_acao_gerencial_embrapa.setAttribute('type','submit');
+  btn_acao_gerencial_embrapa.setAttribute('id', 'btn_acao_gerencial_embrapa');
+  btn_acao_gerencial_embrapa.setAttribute('name', 'list_management_actions');
+  form.appendChild(btn_projeto_embrapa);
+  form.appendChild(btn_acao_gerencial_embrapa);
+  console.log(id);
+  console.log(action);
+  document.body.appendChild(form);
+  if (id === 'btn_projeto_embrapa'){
+    const btnAction = document.getElementById('btn_projeto_embrapa');
+    btnAction.click();
+  }else if(id === 'btn_acao_gerencial_embrapa'){
+    const btnAction = document.getElementById('btn_acao_gerencial_embrapa');
+    btnAction.click();
+  }
+}
+
+function save_autor() {
+
+  if ($('#id_name').val().length == 0)
+  {
+    alert('Informe o Nome');
+    return;
+  }
+  if ($('#id_autoria').val().length == 0)
+  {
+    alert('Informe a Autoria');
+    return;
+  }
+  if ($('#id_afiliacao').val().length == 0)
+  {
+    alert('Informe a Afiliação');
+    return;
+  }
+  if ($('#id_name').val().length > 0 &&
+    $('#id_autoria').val().length > 0 &&
+    $('#id_afiliacao').val().length > 0) {
+    //
+    $.ajax({
+      type: 'GET',
+      url: '/maps/add_autor',
+      contentType: 'application/json; charset=utf-8',
+      data: {'name': $('#id_name').val(), 'autoria' : $('#id_autoria').val(), 'afiliacao' : $('#id_afiliacao').val()},
+      success: function(data) {
+        //
+        $('#addingEmbrapaAuthorsModal').modal('hide');
+        if (JSON.parse(data).success) {
+          alert('Autor salvo com sucesso!')
+        }
+        else {
+          alert('Ocorreu um erro ao tentar salvar!')
+        }
+      },
+      error: function(rs, e) { 
+         $('#addingEmbrapaAuthorsModal').modal('hide');
+         alert(rs.responseText);                
+      }
+    });
+  }
+  
+}
+
+function save_referencia() {
+  if ($('#id_name_reference').val().length == 0)
+  {
+    alert('Informe a Referência');
+    return;
+  }
+
+  if ($('#id_name_reference').val().length > 0) {
+    //
+    $.ajax({
+      type: 'GET',
+      url: '/maps/add_declaracao',
+      contentType: 'application/json; charset=utf-8',
+      data: {'name': $('#id_name_reference').val()},
+      success: function(data) {
+        //
+        $('#addingEmbrapaReferenceModal').modal('hide');
+        if (JSON.parse(data).success) {
+          alert('Referência salva com sucesso!')
+        }
+        else {
+          alert('Ocorreu um erro ao tentar salvar!')
+        }
+      },
+      error: function(rs, e) { 
+         $('#addingEmbrapaReferenceModal').modal('hide');
+         alert(rs.responseText);                
+      }
+    });
+  }
+
+}
+
+</script>
+
 <style>
 /* general panel styles */
 #mdeditor_form .panel-group .panel{
@@ -54,7 +163,8 @@ form #mdeditor_form label{
 #mdeditor_form #id_resource-metadata_uploaded_preserve,
 #mdeditor_form #id_resource-is_approved,
 #mdeditor_form #id_resource-is_published,
-#mdeditor_form #id_resource-featured  {
+#mdeditor_form #id_resource-featured,
+#mdeditor_form #id_resource-is_inde  {
   float: right;
 }
 
@@ -299,6 +409,10 @@ span.grippy::after {
                                 </div>
                                 <div class="col-lg-5">
                                     <div class="col-lg-12">
+                                        <span><label for="{{ map_form.date_type|id }}">{{ map_form.embrapa_keywords.label }}</label></span>
+                                        {{ map_form.embrapa_keywords }}
+                                    </div>
+                                    <div class="col-lg-12">
                                         <span><label for="{{ map_form.date_type|id }}">{{ map_form.keywords.label }}</label></span>
                                         {{ map_form.keywords }}
                                     </div>
@@ -316,6 +430,17 @@ span.grippy::after {
                                         <span><label for="{{ map_form.date|id }}">{{ map_form.date.label }}</label></span>
                                         <!--<p class="xxs-font-size">(When a given event occurred on the resource)</p>-->
                                         {{ map_form.date }}
+                                    </div>
+                                    <!-- Embrapa -->
+                                    <div class="col-lg-6 col-xs-12">
+                                        <span><label for="{{ map_form.scale|id }}">{{ map_form.scale.label }}</label></span>
+                                        <!--<p class="xxs-font-size">(When a given event occurred on the resource)</p>-->
+                                        {{ map_form.scale }}
+                                    </div>
+                                    <div class="col-lg-6 col-xs-12">
+                                        <span><label for="{{ map_form.data_criacao|id }}">{{ map_form.data_criacao.label }}</label></span>
+                                        <!--<p class="xxs-font-size">(When a given event occurred on the resource)</p>-->
+                                        {{ map_form.data_criacao }}
                                     </div>
                                     <div id="basicCategoryInfo" class="col-lg-12">
                                         <span><label for="{{ category_form.category_choice_field|id }}" class="control-label required-field">{% trans "Category" %}</label></span>
@@ -395,11 +520,41 @@ span.grippy::after {
                                         {{ map_form.regions }}
                                       </div>
                                       <div>
-                                        <span><label for="{{ map_form.data_quality_statement|id }}">{{ map_form.data_quality_statement.label }}</label></span>
+                                        <span><label for="{{ map_form.embrapa_data_quality_statement|id }}">{{ map_form.embrapa_data_quality_statement.label }}</label></span>
                                         <!--<p class="xxs-font-size">(General explanation of the data producer's knowledge about the lineage)</p>-->
-                                        {{ map_form.data_quality_statement }}
+                                        {{ map_form.embrapa_data_quality_statement }}
                                       </div>
+                                        <a href="#adicionar-referencia" style="margin-top: 10px;" data-toggle="modal" data-target="#addingEmbrapaReferenceModal" class="btn btn-primary">{% trans "Adicionar Referência" %}</a>
+                                        <span><label style="margin-top: 20px;" for="{{ map_form.data_quality_statement|id }}">{{ map_form.data_quality_statement.label }}</label></span>
+                                        <!--<p class="xxs-font-size">(Brief narrative summary of the content of the resource/s)</p>-->
+                                      {{ map_form.data_quality_statement }}
                                 </div>
+                                  <body>
+                                    <div class="modal" tabindex="-1" role="dialog" id="addingEmbrapaReferenceModal">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title">Adicionar Referência</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                          </div>
+                                          <div class="modal-body">
+
+                                              <div class="pure-control-group">
+                                                <label>Referência</label>
+                                                <input id="id_name_reference" type="text">
+                                              </div>
+
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                                <button type="button" onclick="save_referencia()" class="btn btn-primary">Salvar</button>
+                                              </div>
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </body>
                                 <div class="col-lg-4">
                                     <div>
                                         <span><label for="{{ map_form.restriction_code_type|id }}">{{ map_form.restriction_code_type.label }}</label></span>
@@ -431,6 +586,18 @@ span.grippy::after {
                     <span><label for="{{ map_form.edition|id }}">{{ map_form.edition.label }}</label></span>
                     <!--<p class="xxs-font-size">(Version of the cited resource)</p>-->
                     {{ map_form.edition }}
+                </div>
+                <!--<button type="button" onclick="submitBtn('btn_projeto_embrapa')" class="btn btn-primary">Listar Projetos</button>
+                <button type="button" onclick="submitBtn('btn_acao_gerencial_embrapa')" class="btn btn-primary">Listar Ações Gerenciais</button>-->
+                <div>
+                    <span><label for="{{ map_form.choice_projeto_acao_gerencial|id }}">{{ map_form.choice_projeto_acao_gerencial.label }}</label></span>
+                    <!--<p class="xxs-font-size">(Brief narrative summary of the content of the resource/s)</p>-->
+                    {{ map_form.choice_projeto_acao_gerencial }}
+                </div>
+                <div>
+                    <span><label for="{{ map_form.embrapa_unity|id }}">{{ map_form.embrapa_unity.label }}</label></span>
+                    <!--<p class="xxs-font-size">(Brief narrative summary of the intentions with which the resource/s ...)</p>-->
+                    {{ map_form.embrapa_unity }}
                 </div>
                 <div>
                     <span><label for="{{ map_form.purpose|id }}">{{ map_form.purpose.label }}</label></span>
@@ -469,6 +636,11 @@ span.grippy::after {
                         <!--<p class="xxs-font-size">(Method used to represent geographic information in the dataset)</p>-->
                         {{ map_form.spatial_representation_type }}
                     </div>
+                    <div style="margin-top: 5px">
+                        <span><label for="{{ map_form.link_vinde|id }}">{{ map_form.link_vinde.label }}</label></span>
+                        <!--<p class="xxs-font-size">(Method used to represent geographic information in the dataset)</p>-->
+                        {{ map_form.link_vinde }}
+                    </div>
                 </div>
             </div>
             <div class="col-xs-12 col-lg-3">
@@ -492,6 +664,40 @@ span.grippy::after {
                           <!--<p class="xxs-font-size">(Author of the metadata)</p>-->
                           {{ map_form.metadata_author }}
                       </div>
+                      <div>
+                          <span><label for="{{ map_form.embrapa_autores|id }}">{{ map_form.embrapa_autores.label }}</label></span>
+                          <!--<p class="xxs-font-size">(Author of the metadata)</p>-->
+                          {{ map_form.embrapa_autores }}
+                      </div>
+                      <a href="#adicionar-autores" data-toggle="modal" style="margin-top: 10px;" data-target="#addingEmbrapaAuthorsModal" class="btn btn-primary author">{% trans "Adicionar Autores" %}</a>
+                        <body>
+                          <div class="modal" tabindex="-1" role="dialog" id="addingEmbrapaAuthorsModal">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title">Adicionar Autores</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="pure-control-group">
+                                      <label>Nome</label>
+                                      <input id="id_name" type="text">
+                                      <label>Auditoria</label>
+                                      <input id="id_autoria" type="text">
+                                      <label>Afiliação</label>
+                                      <input id="id_afiliacao" type="text">
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                      <button type="button" onclick="save_autor()" class="btn btn-primary">Salvar</button>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                      </body>
                       {% if GEONODE_SECURITY_ENABLED %}
                       <!--<hr />
                       <div class="modal-body" id="_permissions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -541,6 +747,10 @@ span.grippy::after {
                     <div>
                         <span><label for="{{ map_form.is_published|id }}">{{ map_form.is_published.label }}</label></span>
                         {{ map_form.is_published }}
+                    </div>
+                    <div>
+                        <span><label for="{{ map_form.is_inde|id }}">{{ map_form.is_inde.label }}</label></span>
+                        {{ map_form.is_inde }}
                     </div>
                     <div>
                         <span><label for="{{ map_form.featured|id }}">{{ map_form.featured.label }}</label></span>

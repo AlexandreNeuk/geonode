@@ -72,13 +72,8 @@ urlpatterns = [
         name='autocomplete_embrapa_data_quality_statement',
     ),
     url(
-        r'^autocomplete_embrapa_autores/$',
-        EmbrapaAuthorsAutocomplete.as_view(),
-        name='autocomplete_embrapa_autores',
-    ),
-    url(
         r'^resource_rights/(?P<pk>\d+)$',
         OwnerRightsRequestView.as_view(),
         name='owner_rights_request',
-    ) 
+    ),
 ]

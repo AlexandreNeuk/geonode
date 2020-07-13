@@ -1141,13 +1141,6 @@ def layer_metadata(
                     tb = traceback.format_exc()
                     logger.error(tb)
         tkeywords_form = TKeywordForm(instance=layer)
-    print("request.method:")
-    print(request.method)
-    print(request.GET.__dict__)
-    
-    #print teste 03:
-    print("Teste 03")
-    
     if request.method == "POST" and layer_form.is_valid() and attribute_form.is_valid(
     ) and category_form.is_valid():
         new_poc = layer_form.cleaned_data['poc']
@@ -1288,7 +1281,12 @@ def layer_metadata(
         #print(layer_form.cleaned_data['embrapa_data_quality_statement'])
         #print teste 04:
         print("Teste 05")
-        #pprint(vars(layer))        
+        #pprint(vars(layer))
+        try:
+            layer.save(notify=True)
+        except Exception as e:
+            print(e)
+        print("Teste 06")
 
         up_sessions = UploadSession.objects.filter(layer=layer)
         if up_sessions.count() > 0 and up_sessions[0].user != layer.owner:
@@ -1326,7 +1324,6 @@ def layer_metadata(
         except Exception as e:
             print(e)
             
-        print("Teste 06 - passo do save layers")
         return HttpResponse(json.dumps({'message': message}))
 
     if settings.ADMIN_MODERATE_UPLOADS:
@@ -1385,7 +1382,6 @@ def layer_metadata(
         "resource": layer,
         "layer": layer,
         "layer_form": layer_form,
-		"authors_form": authors_form,
         "poc_form": poc_form,
         "author_form": author_form,
         "attribute_form": attribute_form,

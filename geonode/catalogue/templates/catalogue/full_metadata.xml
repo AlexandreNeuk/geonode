@@ -204,6 +204,16 @@
                </gmd:dateType>
              </gmd:CI_Date>
            </gmd:date>
+           <gmd:date>
+               <gmd:CI_Date>
+                 <gmd:date>
+                   <gco:DateTime>{{layer.data_criacao|date:"Y-m-d\TH:i:s\Z"}}</gco:DateTime>
+                 </gmd:date>
+                 <gmd:dateType>
+                   <gmd:CI_DateTypeCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="Creation">Creation</gmd:CI_DateTypeCode>
+                 </gmd:dateType>
+               </gmd:CI_Date>
+             </gmd:date>
            <gmd:edition {% if not layer.edition %}gco:nilReason="missing"{% endif %}>
                  {% if layer.edition %}<gco:CharacterString>{{layer.edition}}</gco:CharacterString>{% endif %}
            </gmd:edition>
@@ -227,6 +237,12 @@
        <gmd:purpose {% if not layer.purpose %}gco:nilReason="missing"{% endif %}>
              {% if layer.purpose %}<gco:CharacterString>{{layer.purpose}}</gco:CharacterString>{% endif %}
        </gmd:purpose>
+       <gmd:data_quality_statement {% if not layer.data_quality_statement %}gco:nilReason="missing"{% endif %}>
+               {% if layer.data_quality_statement %}<gco:CharacterString>{{layer.data_quality_statement}}</gco:CharacterString>{% endif %}
+         </gmd:data_quality_statement>
+         <gmd:embrapa_unity {% if not layer.embrapa_unity %}gco:nilReason="missing"{% endif %}>
+               {% if layer.embrapa_unity %}<gco:CharacterString>{{layer.embrapa_unity}}</gco:CharacterString>{% endif %}
+         </gmd:embrapa_unity>
        <gmd:status>
          <gmd:MD_ProgressCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="completed">completed</gmd:MD_ProgressCode>
        </gmd:status>
@@ -300,6 +316,51 @@
          </gmd:CI_ResponsibleParty>
        </gmd:pointOfContact>
        {% endwith %}
+         <!-- EMBRAPA -->
+         {% for poc in layer.embrapa_authors_list %}   
+         <gmd:pointOfContact> 
+             <gmd:CI_ResponsibleParty>
+                 <gmd:individualName {% if not poc %}gco:nilReason="missing"{% endif %}>
+                     <gco:CharacterString>{{ poc }}</gco:CharacterString>
+                 </gmd:individualName>
+                 <gmd:organisationName gco:nilReason="missing">
+                 </gmd:organisationName>
+                 <gmd:positionName gco:nilReason="missing">
+                 </gmd:positionName>
+                 <gmd:contactInfo>
+                     <gmd:CI_Contact>
+                         <gmd:phone>
+                             <gmd:CI_Telephone>
+                                 <gmd:voice gco:nilReason="missing">
+                                 </gmd:voice>
+                                 <gmd:facsimile gco:nilReason="missing">
+                                 </gmd:facsimile>
+                             </gmd:CI_Telephone>
+                         </gmd:phone>
+                         <gmd:address>
+                             <gmd:CI_Address>
+                                 <gmd:deliveryPoint gco:nilReason="missing">
+                                 </gmd:deliveryPoint>
+                                 <gmd:city gco:nilReason="missing">
+                                 </gmd:city>
+                                 <gmd:administrativeArea gco:nilReason="missing">
+                                 </gmd:administrativeArea>
+                                 <gmd:postalCode gco:nilReason="missing">
+                                 </gmd:postalCode>
+                                 <gmd:country gco:nilReason="missing">
+                                 </gmd:country>
+                                 <gmd:electronicMailAddress gco:nilReason="missing">
+                                 </gmd:electronicMailAddress>
+                             </gmd:CI_Address>
+                         </gmd:address>
+                     </gmd:CI_Contact>
+                 </gmd:contactInfo>
+                 <gmd:role>
+                     <gmd:CI_RoleCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author">Autor do Plano de Informação</gmd:CI_RoleCode>
+                 </gmd:role>
+             </gmd:CI_ResponsibleParty>
+         </gmd:pointOfContact>
+         {% endfor %}
 
        {% if layer.maintenance_frequency %}
        <gmd:resourceMaintenance>
@@ -337,6 +398,20 @@
            </gmd:version>
          </gmd:MD_Format>
        </gmd:resourceFormat>
+         {% if layer.embrapa_keyword_list %}
+         <gmd:descriptiveKeywords>
+             <gmd:MD_Keywords>
+                 {% for kw in layer.embrapa_keyword_list %}
+                 <gmd:keyword>
+                     <gco:CharacterString>{{kw}}</gco:CharacterString>
+                 </gmd:keyword>
+                 {% endfor %}
+                 <gmd:type>
+                     <gmd:MD_KeywordTypeCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">theme</gmd:MD_KeywordTypeCode>
+                 </gmd:type>
+             </gmd:MD_Keywords>
+         </gmd:descriptiveKeywords>
+         {% endif %}
        {% if layer.keyword_list %}
        <gmd:descriptiveKeywords>
          <gmd:MD_Keywords>
@@ -528,6 +603,19 @@
              </gmd:CI_OnlineResource>
            </gmd:onLine>
            {% endfor %}
+           {% if layer.link_vinde %}
+             <gmd:CI_OnlineResource>
+                     <gmd:linkage>
+                         <gmd:URL>{{ layer.link_vinde }}</gmd:URL>
+                     </gmd:linkage>
+                     <gmd:protocol>
+                         <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
+                     </gmd:protocol>
+                     <gmd:description>
+                         <gco:CharacterString>Acesso ao dado no portal VINDE (Visualizador da Infraestrutura de Dados Espaciais do Brasil )</gco:CharacterString>
+                     </gmd:description>
+             </gmd:CI_OnlineResource>
+             {% endif %}
          </gmd:MD_DigitalTransferOptions>
        </gmd:transferOptions>
      </gmd:MD_Distribution>
@@ -543,9 +631,21 @@
        </gmd:scope>
        <gmd:lineage>
          <gmd:LI_Lineage>
-           <gmd:statement {% if not layer.data_quality_statement %}gco:nilReason="missing"/>{% else %}><gco:CharacterString>{{layer.data_quality_statement}}</gco:CharacterString></gmd:statement>{% endif %}
-         </gmd:LI_Lineage>
-       </gmd:lineage>
-     </gmd:DQ_DataQuality>
-   </gmd:dataQualityInfo>
+           <gmd:statement {% if not layer.embrapa_data_quality_statement %}gco:nilReason="missing"/>{% else %}>
+             {% if layer.embrapa_data_quality_statement_list %}
+             <gmd:descriptiveDataQualityStatement>
+              <gmd:MD_DataQualityStatement>
+                {% for data_quality in layer.embrapa_data_quality_statement_list %}
+                <gmd:dataQuality>
+                  <gco:CharacterString>{{data_quality}}</gco:CharacterString>
+                </gmd:dataQuality>
+                {% endfor %}
+              </gmd:MD_DataQualityStatement>
+             </gmd:descriptiveDataQualityStatement>
+             {% endif %}
+             </gmd:statement>{% endif %}
+           </gmd:LI_Lineage>
+         </gmd:lineage>
+       </gmd:DQ_DataQuality>
+     </gmd:dataQualityInfo>
  </gmd:MD_Metadata>

@@ -79,8 +79,6 @@ from deprecated import deprecated
 
 from dal import autocomplete
 
-from geonode.base.utils import ManageResourceOwnerPermissions
-
 # embrapa #
 from django.utils.text import slugify
 from geonode.base.models import Embrapa_Data_Quality_Statement, Embrapa_Authors
