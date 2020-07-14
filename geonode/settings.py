@@ -43,6 +43,14 @@ SILENCED_SYSTEM_CHECKS = [
     'urls.W002'
 ]
 
+# Embrapa Unity
+
+EMBRAPA_UNITY_DEFAULT = '96'
+ACAO_GERENCIAL_API = False
+PROJETO_API = False
+FILTRO_AUTOR = 'Andre'
+FILTRO_DATA = 'abobrinha'
+
 # GeoNode Version
 VERSION = get_version()
 
@@ -86,12 +94,11 @@ SECRET_KEY = os.getenv('SECRET_KEY', _DEFAULT_SECRET_KEY)
 
 #DATABASE_URL = os.getenv(
 #    'DATABASE_URL',
-##    'sqlite:///{path}'.format(
- #       path=os.path.join(PROJECT_ROOT, 'development.db')
- #   )
+#    'sqlite:///{path}'.format(
+#        path=os.path.join(PROJECT_ROOT, 'development.db')
+#    )
 #)
 
-#DATABASE_URL = 'postgresql://test_geonode:test_geonode@localhost:5432/geonode'
 DATABASE_URL = 'postgresql://postgres:__geoinfo__@192.168.157.18:5433/cnpm_geonode'
 
 # Defines settings for development
@@ -1124,7 +1131,7 @@ try:
     ALLOWED_HOSTS = ast.literal_eval(os.getenv('ALLOWED_HOSTS'))
 except ValueError:
     # fallback to regular list of values separated with misc chars
-    ALLOWED_HOSTS = [HOSTNAME, 'localhost', 'django', 'geonode'] if os.getenv('ALLOWED_HOSTS') is None \
+    ALLOWED_HOSTS = [HOSTNAME, 'localhost', 'django', 'geonode', '192.168.15.83', '192.168.15.124','192.168.15.157','hdnembrapa.ddns.net','hdnembrapa.ddns.net:8000'] if os.getenv('ALLOWED_HOSTS') is None \
         else re.split(r' *[,|:|;] *', os.getenv('ALLOWED_HOSTS'))
 
 # AUTH_IP_WHITELIST property limits access to users/groups REST endpoints
