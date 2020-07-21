@@ -360,13 +360,6 @@ class ResourceBaseForm(TranslationModelForm):
         widget=ResourceBaseDateTimePicker(options={"format": "YYYY-MM-DD HH:mm a"})
     )
 
-    embrapa_unity = autocomplete.Select2ListChoiceField(
-        label=_("Unidade Embrapa"),
-        required=False,
-        choice_list=choice_unity(),
-        widget= autocomplete.ListSelect2(url='autocomplete_embrapa_unity')
-    )
-
     poc = forms.ModelChoiceField(
         empty_label=_("Person outside GeoNode (fill form)"),
         label=_("Point of Contact"),

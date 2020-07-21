@@ -43,8 +43,6 @@ SILENCED_SYSTEM_CHECKS = [
     'urls.W002'
 ]
 
-EMBRAPA_UNITY_DEFAULT = '96'
-
 # GeoNode Version
 VERSION = get_version()
 
@@ -93,8 +91,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', _DEFAULT_SECRET_KEY)
 #    )
 #)
 
-# DATABASE_URL = 'postgresql://test_geonode:test_geonode@localhost:5432/geonode'
-DATABASE_URL = 'postgresql://postgres:__geoinfo__@192.168.157.18:5433/cnmp_geonode_hom'
+DATABASE_URL = 'postgresql://postgres:__geoinfo__@192.168.157.18:5433/cnpm_geonode'
 
 # Defines settings for development
 
