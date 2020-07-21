@@ -561,6 +561,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
     VALID_DATE_TYPES = [(x.lower(), _(x))
                         for x in ['Creation', 'Publication', 'Revision']]
 
+    embrapa_unity_help_text = _('Escolha a unidade da Embrapa')
     date_help_text = _('reference date for the cited resource')
     date_type_help_text = _('identification of when a given event occurred')
     edition_help_text = _('version of the cited resource')
@@ -630,6 +631,13 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
         choices=VALID_DATE_TYPES,
         default='publication',
         help_text=date_type_help_text)
+    embrapa_unity = models.CharField(
+        _('embrapa unity'),
+        max_length=500,
+        editable=True,
+        default=settings.EMBRAPA_UNITY_DEFAULT,
+        help_text=embrapa_unity_help_text)
+        
     edition = models.CharField(
         _('edition'),
         max_length=255,
