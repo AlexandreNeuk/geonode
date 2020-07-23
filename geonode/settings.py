@@ -91,7 +91,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', _DEFAULT_SECRET_KEY)
 #    )
 #)
 
-DATABASE_URL = 'postgresql://postgres:__geoinfo__@192.168.157.18:5433/cnpm_geonode'
+DATABASE_URL = 'postgresql://postgres:__geoinfo__@192.168.157.18:5433/cpatc_geonode'
 
 # Defines settings for development
 
