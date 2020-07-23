@@ -26,7 +26,7 @@ import sys
 from datetime import timedelta
 from distutils.util import strtobool  # noqa
 from urllib.parse import urlparse, urlunparse, urljoin
-
+import logging
 import django
 import dj_database_url
 #
@@ -35,6 +35,8 @@ import dj_database_url
 from django.conf.global_settings import DATETIME_INPUT_FORMATS
 from geonode import get_version
 from kombu import Queue, Exchange
+
+logger = logging.getLogger(__name__)
 
 SILENCED_SYSTEM_CHECKS = [
     '1_8.W001',
@@ -55,7 +57,7 @@ FILTRO_DATA = 'abobrinha'
 VERSION = get_version()
 
 DEFAULT_CHARSET = "utf-8"
-
+logger.info('TESTE ================================================= something here')
 # Defines the directory that contains the settings file as the PROJECT_ROOT
 # It is used for relative settings elsewhere.
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -517,52 +519,30 @@ if UNOCONV_ENABLE:
     UNOCONV_EXECUTABLE = os.getenv('UNOCONV_EXECUTABLE', '/usr/bin/unoconv')
     UNOCONV_TIMEOUT = int(os.getenv('UNOCONV_TIMEOUT', 30))  # seconds
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d '
-                      '%(thread)d %(message)s'
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'default': {
+                'format': '[DJANGO] %(levelname)s %(asctime)s %(module)s '
+                          '%(name)s.%(funcName)s:%(lineno)s: %(message)s'
+            },
         },
-        'simple': {
-            'format': '%(message)s',
+        'handlers': {
+            'console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+                'formatter': 'default',
+            }
         },
-    },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'console': {
-            'level': 'ERROR',
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+        'loggers': {
+            '*': {
+                'handlers': ['console'],
+                'level': 'DEBUG',
+                'propagate': True,
+            }
         },
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler',
-        }
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["console"], "level": "ERROR", },
-        "geonode": {
-            "handlers": ["console"], "level": "ERROR", },
-        "geonode.qgis_server": {
-            "handlers": ["console"], "level": "ERROR", },
-        "geoserver-restconfig.catalog": {
-            "handlers": ["console"], "level": "ERROR", },
-        "owslib": {
-            "handlers": ["console"], "level": "ERROR", },
-        "pycsw": {
-            "handlers": ["console"], "level": "ERROR", },
-        "celery": {
-            'handlers': ["console"], 'level': 'ERROR', },
-    },
-}
+    }
 
 #
 # Test Settings
