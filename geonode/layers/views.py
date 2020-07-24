@@ -932,7 +932,7 @@ def add_embrapa_autores(request):
             print(autoria)
 
             afiliacao = form.cleaned_data['afiliacao']
-            print("Afiliação views do layers:")
+            print("Afiliacao views do layers:")
             print(afiliacao)
 
             embrapa_autores_creates, created = Embrapa_Authors.objects.get_or_create(name=name, 
@@ -1079,7 +1079,7 @@ def layer_metadata(
                 content_type='application/json',
                 status=400)
         # embrapa #
-        # montar a lógica do embrapa_keywords em algum lugar para poder printar o cleaned_data dele # 
+        # montar a lï¿½gica do embrapa_keywords em algum lugar para poder printar o cleaned_data dele # 
         layer_form = LayerForm(request.POST, instance=layer, prefix="resource")
         print("Teste 02.2.1")
         print(layer_form.is_valid())
@@ -1248,14 +1248,14 @@ def layer_metadata(
         print("Teste 04.1")
         ### guarda o valor de keyword_csv na keywords_plain para habilitar a busca dentro das palavras chave
         # layer.keywords_plain = ' '.join([word for word in new_keywords])
-        ### concatena também a lista de palavras-chave reservadas da embrapa
+        ### concatena tambï¿½m a lista de palavras-chave reservadas da embrapa
         # embrapa_keywords = layer_form.cleaned_data['embrapa_keywords']
         #layer_form.cleaned_data['embrapa_keywords'] = model_to_dict(embrapa_keywords)
         #print("Atributos do embrapa_keywords")
         #print(embrapa_keywords)
         # keys = embrapa_keywords
         #layer.keywords_plain = layer.keywords_plain + ' '.join([word for word in embrapa_keywords])
-        # layer.keywords_plain = layer.keywords_plain + ' '.join([word for word in keys]) #mudança para testes
+        # layer.keywords_plain = layer.keywords_plain + ' '.join([word for word in keys]) #mudanï¿½a para testes
 
         # print("Atributos do HierarchicalKeywords")
         # print(new_keywords)
@@ -1267,7 +1267,7 @@ def layer_metadata(
         purpose = layer_form.cleaned_data['purpose']
         print(purpose)
 
-        print("Atributos da declaração da qualidade do dado:")
+        print("Atributos da declaracao da qualidade do dado:")
         data_quality_statement = layer_form.cleaned_data['embrapa_data_quality_statement']
         print(data_quality_statement)
 
