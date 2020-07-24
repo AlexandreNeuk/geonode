@@ -216,10 +216,10 @@ class EmbrapaKeywordsAutocomplete(autocomplete.Select2QuerySetView):
 #        search_fields = ['^title']
 
         #form = BatchEditForm(request.GET)
-        # Verificar se isso da certo pra poder fazer o filtro tanto para aÁ„o gerencial quanto para projeto para separ·-los
-        # Tentar alocar a chamada da api e o mÈtodo de save aqui
-        # SE A DATA QUE … DE HOJE (MENOS) A DATA QUE VEIO DO BANCO … (MAIOR) QUE O TEMPO EM SEGUNDOS DE UM M S, 
-        # DAI ENTRA PRA SALVAR, SE N√O, CONTINUA (E SE SALVAR DEPOIS DE UM TEMPO, ATUALIZAR A DATA DE SAVE COM UM UPDATE VIA DJANGO)
+        # Verificar se isso da certo pra poder fazer o filtro tanto para a√ß√£o gerencial quanto para projeto para separ√°-los
+        # Tentar alocar a chamada da api e o m√©todo de save aqui
+        # SE A DATA QUE √â DE HOJE (MENOS) A DATA QUE VEIO DO BANCO √â (MAIOR) QUE O TEMPO EM SEGUNDOS DE UM M√äS, 
+        # DAI ENTRA PRA SALVAR, SE N√ÉO, CONTINUA (E SE SALVAR DEPOIS DE UM TEMPO, ATUALIZAR A DATA DE SAVE COM UM UPDATE VIA DJANGO)
         # Criar uma tabela pra salvar a data e atualizar ela quando for salvar a base de dados vindos da api
         
 #        print("Teste no views.py do base - Purpose")
@@ -237,7 +237,7 @@ class EmbrapaAuthorsAutocomplete(autocomplete.Select2GroupListView):
     def get_list(self):
 
         if not self.q:
-            print("T· vazia")
+            print("Ta vazia")
             embrapa_autores = None
         else:
             embrapa_autores = choice_authors()
@@ -254,7 +254,7 @@ class EmbrapaDataQualityStatementAutocomplete(autocomplete.Select2GroupListView)
 
         embrapa_data_quality_statements = choice_data_quality_statement()
 
-        print("Views declaraÁ„o da qualidade do dado:")
+        print("Views declara√ß√£o da qualidade do dado:")
 
         return embrapa_data_quality_statements
 
