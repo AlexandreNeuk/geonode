@@ -216,7 +216,7 @@ class EmbrapaKeywordsAutocomplete(autocomplete.Select2QuerySetView):
 #        search_fields = ['^title']
 
         #form = BatchEditForm(request.GET)
-        # Verificar se isso da certo pra poder fazer o filtro tanto para ação gerencial quanto para projeto para separá-los
+        # Verificar se isso da certo pra poder fazer o filtro tanto para acao gerencial quanto para projeto para separá-los
         # Tentar alocar a chamada da api e o método de save aqui
         # SE A DATA QUE É DE HOJE (MENOS) A DATA QUE VEIO DO BANCO É (MAIOR) QUE O TEMPO EM SEGUNDOS DE UM MÊS, 
         # DAI ENTRA PRA SALVAR, SE NÃO, CONTINUA (E SE SALVAR DEPOIS DE UM TEMPO, ATUALIZAR A DATA DE SAVE COM UM UPDATE VIA DJANGO)

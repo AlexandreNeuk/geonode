@@ -343,14 +343,14 @@ class ResourceBaseForm(TranslationModelForm):
     """Base form for metadata, should be inherited by childres classes of ResourceBase"""
 
     owner = forms.ModelChoiceField(
-        empty_label="Proprietário",
-        label=_("Proprietário"),
+        empty_label="Proprietario",
+        label=_("Proprietario"),
         required=False,
         queryset=get_user_model().objects.exclude(username='AnonymousUser'),
         widget=autocomplete.ModelSelect2(url='autocomplete_profile'))
 
     date = forms.DateTimeField(
-        label=_("Data de Publicação"),
+        label=_("Data de Publicacao"),
         localize=True,
         input_formats=['%Y-%m-%d %H:%M %p'],
         widget=ResourceBaseDateTimePicker(options={"format": "YYYY-MM-DD HH:mm a"})
@@ -396,10 +396,10 @@ class ResourceBaseForm(TranslationModelForm):
     
     # embrapa #
     data_criacao = forms.DateTimeField(
-        label = _("Ano de criação do conjunto de dados"),
+        label = _("Ano de criacao do conjunto de dados"),
         localize=True,
         input_formats=['%Y-%m-%d %H:%M %p'],
-        help_text="Insira a data de criação do conjunto de dados",
+        help_text="Insira a data de criacao do conjunto de dados",
         widget=ResourceBaseDateTimePicker(options={"format": "YYYY-MM-DD HH:mm a"}))
 
     #embrapa_keywords = forms.ModelMultipleChoiceField(
@@ -432,7 +432,7 @@ class ResourceBaseForm(TranslationModelForm):
         level_indicator=u'___')
     """
     regions = RegionsMultipleChoiceField(
-        label=_("Regiões"),
+        label=_("Regioes"),
         required=False,
         choices=get_tree_data(),
         widget=RegionsSelect)
@@ -444,8 +444,8 @@ class ResourceBaseForm(TranslationModelForm):
     #    widget= autocomplete.ModelSelect2(url='autocomplete_embrapa_unity')
     #)
     choice_projeto_acao_gerencial = forms.ChoiceField(
-        label=_("Escolha uma das opções:"),
-        choices=(('Projeto','Listar Projeto'),('Ação Gerencial','Listar Ação Gerencial')), 
+        label=_("Escolha uma das opcoes:"),
+        choices=(('Projeto','Listar Projeto'),('Aï¿½ï¿½o Gerencial','Listar Aï¿½ï¿½o Gerencial')), 
         widget=forms.RadioSelect())
     embrapa_unity = autocomplete.Select2ListChoiceField(
         label=_("Unidade Embrapa"),
@@ -469,7 +469,7 @@ class ResourceBaseForm(TranslationModelForm):
     )
 
     embrapa_data_quality_statement = forms.MultipleChoiceField(
-        label=_("Declaração da Qualidade do Dado - Fontes"),
+        label=_("Declaracao da Qualidade do Dado - Fontes"),
         required=False,
         choices=choice_data_quality_statement(),
         widget = autocomplete.Select2Multiple(url='autocomplete_embrapa_data_quality_statement')
@@ -496,7 +496,7 @@ class ResourceBaseForm(TranslationModelForm):
         )
         print("data_quality_statement no forms do base")
         self.fields['embrapa_data_quality_statement'] = forms.MultipleChoiceField(
-            label=_("Declaração da Qualidade do Dado - Fontes"),
+            label=_("Declaracao da Qualidade do Dado - Fontes"),
             required=False,
             choices=choice_data_quality_statement(),
             widget= autocomplete.Select2Multiple(url='autocomplete_embrapa_data_quality_statement')
@@ -570,7 +570,7 @@ class ResourceBaseForm(TranslationModelForm):
 
         return embrapa_data_quality_statement
 
-    #É AQUI QUE TÁ SEPARANDO POR VIRGULAS AS PALAVRAS CHAVE
+    #ï¿½ AQUI QUE Tï¿½ SEPARANDO POR VIRGULAS AS PALAVRAS CHAVE
     def clean_embrapa_keywords(self):
         from urllib.parse import unquote
         from html.entities import codepoint2name
@@ -612,7 +612,7 @@ class ResourceBaseForm(TranslationModelForm):
                     _unsescaped_embrapa_kwds.append(str(_k))
         return _unsescaped_embrapa_kwds
 
-    #É AQUI QUE TÁ SEPARANDO POR VIRGULAS AS PALAVRAS CHAVE
+    #ï¿½ AQUI QUE Tï¿½ SEPARANDO POR VIRGULAS AS PALAVRAS CHAVE
     def clean_keywords(self):
         from urllib.parse import unquote
         from html.entities import codepoint2name
