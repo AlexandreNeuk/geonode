@@ -326,7 +326,7 @@ def map_metadata(
             settings.PROJETO_API = True
             settings.ACAO_GERENCIAL_API = False
         elif management_actions:
-            print("CLIQUEI EM AÇÃO GERENCIAL")
+            print("CLIQUEI EM ACAO GERENCIAL")
             settings.ACAO_GERENCIAL_API = True
             settings.PROJETO_API = False
 

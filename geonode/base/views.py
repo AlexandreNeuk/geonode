@@ -197,42 +197,6 @@ class HierarchicalKeywordAutocomplete(SimpleSelect2View):
     model = HierarchicalKeyword
     filter_arg = 'slug__icontains'
 
-### embrapa ###
-'''
-class EmbrapaKeywordsAutocomplete(autocomplete.Select2QuerySetView):
-
-    def get_queryset(self):
-        search_fields = ['^name']
-
-        qs = Embrapa_Keywords.objects.all()
-
-        if self.q:
-            qs = qs.filter(name__icontains=self.q)
-
-        return qs
-'''
-#class Embrapa_PurposeAutocomplete(autocomplete.Select2QuerySetView):
-#    def get_queryset(self):
-#        search_fields = ['^title']
-
-        #form = BatchEditForm(request.GET)
-        # Verificar se isso da certo pra poder fazer o filtro tanto para acao gerencial quanto para projeto para separá-los
-        # Tentar alocar a chamada da api e o método de save aqui
-        # SE A DATA QUE É DE HOJE (MENOS) A DATA QUE VEIO DO BANCO É (MAIOR) QUE O TEMPO EM SEGUNDOS DE UM MÊS, 
-        # DAI ENTRA PRA SALVAR, SE NÃO, CONTINUA (E SE SALVAR DEPOIS DE UM TEMPO, ATUALIZAR A DATA DE SAVE COM UM UPDATE VIA DJANGO)
-        # Criar uma tabela pra salvar a data e atualizar ela quando for salvar a base de dados vindos da api
-        
-#        print("Teste no views.py do base - Purpose")
-#        print("Unidade no purpose:")
-#        print(settings.EMBRAPA_UNITY_DEFAULT)
-
-#        qs = Embrapa_Purpose.objects.all()
-
-#        if self.q:
-#            qs = qs.filter(Q(title__icontains=self.q) | Q(identifier__icontains=self.q) | Q(project_code__icontains=self.q))
-
-#        return qs
-
 class EmbrapaAuthorsAutocomplete(autocomplete.Select2GroupListView):
     def get_list(self):
 

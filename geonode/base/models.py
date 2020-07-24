@@ -1114,8 +1114,8 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
     #    help_text = embrapa_unity_help_text,
     #    on_delete=models.CASCADE)
     choice_projeto_acao_gerencial = models.CharField(
-        _('Escolha uma das opções:'),
-        choices=(('Projeto','Listar Projeto'),('Ação Gerencial','Listar Ação Gerencial')), 
+        _('Escolha uma das opcoes:'),
+        choices=(('Projeto','Listar Projeto'),('Acao Gerencial','Listar Acao Gerencial')), 
         max_length=100, 
         default='Listar Projeto')
     embrapa_unity = models.CharField(
@@ -1137,13 +1137,13 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
         blank=True,
         help_text=purpose_help_text)
     embrapa_data_quality_statement = TaggableManager(
-        _('Declaração da Qualidade do Dado - Fontes'), 
+        _('Declaracao da Qualidade do Dado - Fontes'), 
         through=Embrapa_Data_Quality_Statement_ResourceBase,
         blank=True,
         help_text=data_quality_statement_help_text, 
         manager= _EmbrapaDataTagManager)
     data_quality_statement = models.TextField(
-        _('Declaração da Qualidade do Dado - Descrição'),
+        _('Declaracao da Qualidade do Dado - Descricao'),
         max_length=2000,
         blank=True,
         null=True)
@@ -1303,7 +1303,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
 
     # metadata XML specific fields
     metadata_uploaded = models.BooleanField(default=False)
-    metadata_uploaded_preserve = models.BooleanField(_('Preservação de update de metadados'), default=False)
+    metadata_uploaded_preserve = models.BooleanField(_('Preservacao de update de metadados'), default=False)
     metadata_xml = models.TextField(
         null=True,
         default='<gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"/>',
