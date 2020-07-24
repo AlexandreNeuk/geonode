@@ -100,11 +100,11 @@ def catalogue_post_save(instance, sender, **kwargs):
         if instance.metadata_uploaded and instance.metadata_uploaded_preserve:
             md_doc = etree.tostring(dlxml.fromstring(instance.metadata_xml))
         elif instance.is_published:
-            print("Is_published do catalogue:")
-            print(instance.is_published)
+            #print("Is_published do catalogue:")
+            #print(instance.is_published)
             md_doc = catalogue.catalogue.csw_gen_xml(instance, 'catalogue/full_metadata.xml')
-            print("md_doc dentro do else do catalogue:")
-            print(md_doc)
+            #print("md_doc dentro do else do catalogue:")
+            #print(md_doc)
             resources.update(metadata_xml=md_doc)
         else:
             md_doc = ''
