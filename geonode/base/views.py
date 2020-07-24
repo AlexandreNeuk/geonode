@@ -254,7 +254,7 @@ class EmbrapaDataQualityStatementAutocomplete(autocomplete.Select2GroupListView)
 
         embrapa_data_quality_statements = choice_data_quality_statement()
 
-        print("Views declaração da qualidade do dado:")
+        print("Views declaracao da qualidade do dado:")
 
         return embrapa_data_quality_statements
 
