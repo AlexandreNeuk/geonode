@@ -188,11 +188,11 @@ class SpatialRepresentationType(models.Model):
 # embrapa #
 #class Embrapa_Purpose(models.Model):
 
-    # identifier serve para saber se é ação gerencial ou projeto
+    # identifier serve para saber se Ã© aÃ§Ã£o gerencial ou projeto
 #    identifier = models.CharField(max_length=300)
-    # project_code é pra pegar o código do projeto caso for escolhido a opção projeto
+    # project_code Ã© pra pegar o cÃ³digo do projeto caso for escolhido a opÃ§Ã£o projeto
 #    project_code = models.IntegerField(default=0, unique=True)
-    # title é o título do projeto, serve tanto para ação gerencial quanto para projeto
+    # title Ã© o tÃ­tulo do projeto, serve tanto para aÃ§Ã£o gerencial quanto para projeto
 #    title = models.TextField(default='')
 
 #    def __unicode__(self):
@@ -206,8 +206,8 @@ class SpatialRepresentationType(models.Model):
 #        verbose_name_plural = 'Finalidades'
 
 #class Embrapa_Unity(models.Model):
-    # unity é a unidade da embrapa onde estão armazenados os dados correspondentes a finalidade
-#    unity = models.CharField(choices=(('1', 'um'),('2', 'dois')), max_length=20, default=settings.EMBRAPA_UNITY_DEFAULT, unique=True) #Será trocado de lugar possivelmente
+    # unity Ã© a unidade da embrapa onde estÃ£o armazenados os dados correspondentes a finalidade
+#    unity = models.CharField(choices=(('1', 'um'),('2', 'dois')), max_length=20, default=settings.EMBRAPA_UNITY_DEFAULT, unique=True) #SerÃ¡ trocado de lugar possivelmente
 
 #    def __unicode__(self):
 #        return self.unity
@@ -978,7 +978,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
     date_help_text = _('reference date for the cited resource')
 
     # embrapa #
-    data_criacao_help_text = 'ano de criação do metadado'
+    data_criacao_help_text = 'ano de criacao do metadado'
     autores_help_text = 'lista de autores'
     embrapa_unity_help_text = _('Escolha a unidade da Embrapa')
     purpose_embrapa_help_text = _('Escolha a finalidade do metadado')
@@ -1092,7 +1092,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
     #    help_text=_('Lista de autores separada por virgulas'))
     caracteres = RegexValidator(
         regex=r"^[0-9]*$", 
-        message=_('Permitido apenas números'), 
+        message=_('Permitido apenas nÃºmeros'), 
         code="invalid")
     scale = models.CharField(
         _('Escala '), 
@@ -1114,8 +1114,8 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
     #    help_text = embrapa_unity_help_text,
     #    on_delete=models.CASCADE)
     choice_projeto_acao_gerencial = models.CharField(
-        _('Escolha uma das opções:'),
-        choices=(('Projeto','Listar Projeto'),('Ação Gerencial','Listar Ação Gerencial')), 
+        _('Escolha uma das opÃ§Ãµes:'),
+        choices=(('Projeto','Listar Projeto'),('AÃ§Ã£o Gerencial','Listar AÃ§Ã£o Gerencial')), 
         max_length=100, 
         default='Listar Projeto')
     embrapa_unity = models.CharField(
@@ -1137,13 +1137,13 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
         blank=True,
         help_text=purpose_help_text)
     embrapa_data_quality_statement = TaggableManager(
-        _('Declaração da Qualidade do Dado - Fontes'), 
+        _('DeclaraÃ§Ã£o da Qualidade do Dado - Fontes'), 
         through=Embrapa_Data_Quality_Statement_ResourceBase,
         blank=True,
         help_text=data_quality_statement_help_text, 
         manager= _EmbrapaDataTagManager)
     data_quality_statement = models.TextField(
-        _('Declaração da Qualidade do Dado - Descrição'),
+        _('DeclaraÃ§Ã£o da Qualidade do Dado - DescriÃ§Ã£o'),
         max_length=2000,
         blank=True,
         null=True)
@@ -1303,7 +1303,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
 
     # metadata XML specific fields
     metadata_uploaded = models.BooleanField(default=False)
-    metadata_uploaded_preserve = models.BooleanField(_('Preservação de update de metadados'), default=False)
+    metadata_uploaded_preserve = models.BooleanField(_('PreservaÃ§Ã£o de update de metadados'), default=False)
     metadata_xml = models.TextField(
         null=True,
         default='<gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"/>',
