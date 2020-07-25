@@ -332,11 +332,15 @@
 
         $('#category_form').change(onInputChange).change();
         $('#id_resource-group').change(onInputChange).change();
-        document.querySelector('select[name="resource-keywords"]').onchange=onInputChange
+        try {
+            //document.querySelector('select[name="resource-keywords"]').onchange=onInputChange   
+        } catch (error) {
+            conosle.log('Error: (resource-keywords): ', error)
+        }
 
         $('#id_resource-regions').change(onInputChange).change();
-$('#id_resource-temporal_extent_end').on('blur', function() {$(this).change(onInputChange).change();})
-$('#id_resource-temporal_extent_start').on('blur', function() {$(this).change(onInputChange).change();})
+        $('#id_resource-temporal_extent_end').on('blur', function() {$(this).change(onInputChange).change();})
+        $('#id_resource-temporal_extent_start').on('blur', function() {$(this).change(onInputChange).change();})
         $('#mandatory').find(":input:not(.value-select):not(.autocomplete)").each(function(){
             if(isMandatoryField(this)) {
                 prevNum++;
