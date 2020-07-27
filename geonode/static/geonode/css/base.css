@@ -8054,6 +8054,47 @@ form-inline {
   color: #bd362f;
   font-style: italic;
 }
+
+#chamada {
+  text-shadow: none;
+  line-height: 36px;
+  color: #666;
+  font-size: 18px;
+  font-weight: lighter;
+}
+
+#chamada {
+  text-shadow: none;
+  line-height: 36px;
+  color: #666;
+  font-size: 18px;
+  font-weight: lighter;
+}
+
+.figuras p {
+  text-shadow: none;
+  line-height: 24px;
+  font-size: 16px;
+  color: #3d7db4;
+  font-weight: normal;
+  margin-top: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 20px;
+}
+
+.apresentacao{
+  margin-bottom: 0 !important;
+}
+
+.apreresponsivo {
+  display: inherit;
+  margin-bottom: 20px;
+}
+
+.apreresponsivo {
+  display: none;
+}
+
 /** Metadata select2 styles */
 .has-error {
   color: #a94442 !important;
