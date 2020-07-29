@@ -879,11 +879,13 @@ def add_declaracao(request):
 
 def save_finalidade(request):
     try:
+        print('TIPO: ', )
         if request.GET['tipo'] == 'lp':
-            print(request.GET['tipo'])
+            print('TIPO Listar Projeto')
             settings.PROJETO_API = True
             settings.ACAO_GERENCIAL_API = False
         elif request.GET['tipo'] == 'lag':
+            print('TIPO Listar Acao Gerencial')
             settings.PROJETO_API = False
             settings.ACAO_GERENCIAL_API = True
 

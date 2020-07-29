@@ -22,46 +22,6 @@
 
 <script>
 
-function submitBtn(id){
-	var action = "{% url 'layer_metadata' layer.service_typename %}";
-	var form = document.createElement('FORM');
-	form.setAttribute('action', action);
-	form.setAttribute('method', 'GET');
-	var btn_projeto_embrapa = document.createElement('INPUT');
-	btn_projeto_embrapa.setAttribute('type','submit');
-	btn_projeto_embrapa.setAttribute('id', 'btn_projeto_embrapa');
-	btn_projeto_embrapa.setAttribute('name', 'list_projects');
-	var btn_acao_gerencial_embrapa = document.createElement('INPUT');
-	btn_acao_gerencial_embrapa.setAttribute('type','submit');
-	btn_acao_gerencial_embrapa.setAttribute('id', 'btn_acao_gerencial_embrapa');
-	btn_acao_gerencial_embrapa.setAttribute('name', 'list_management_actions');
-	form.appendChild(btn_projeto_embrapa);
-	form.appendChild(btn_acao_gerencial_embrapa);
-	console.log(id);
-	console.log(action);
-	document.body.appendChild(form);
-	if (id === 'btn_projeto_embrapa'){
-		const btnAction = document.getElementById('btn_projeto_embrapa');
-		btnAction.click();
-	}else if(id === 'btn_acao_gerencial_embrapa'){
-		const btnAction = document.getElementById('btn_acao_gerencial_embrapa');
-		btnAction.click();
-	}
-}
-
-function submitBtnAuthor(){
-  var form = document.createElement('FORM');
-  form.setAttribute('method', 'POST');
-  var button = document.createElement('INPUT');
-  button.setAttribute('type', 'submit');
-  button.setAttribute('id', 'btn_authors_embrapa');
-  button.setAttribute('name', 'saveAuthorModal');
-  form.appendChild(button);
-  document.body.appendChild(form);
-  const btnAction = document.getElementById('btn_authors_embrapa');
-  btnAction.click();
-}
-
 function save_autor() {
 
 	if ($('#id_name').val().length == 0)
@@ -76,7 +36,7 @@ function save_autor() {
 	}
 	if ($('#id_afiliacao').val().length == 0)
 	{
-		alert('Informe a Afiliação');
+		alert('Informe a Afiliaï¿½ï¿½o');
 		return;
 	}
 	if ($('#id_name').val().length > 0 &&
@@ -110,7 +70,7 @@ function save_autor() {
 function save_referencia() {
   if ($('#id_name_reference').val().length == 0)
   {
-    alert('Informe a Referência');
+    alert('Informe a Referï¿½ncia');
     return;
   }
 
@@ -125,7 +85,7 @@ function save_referencia() {
         //
         $('#addingEmbrapaReferenceModal').modal('hide');
         if (JSON.parse(data).success) {
-          alert('Referência salva com sucesso!')
+          alert('Referï¿½ncia salva com sucesso!')
         }
         else {
           alert('Ocorreu um erro ao tentar salvar!')
@@ -339,9 +299,7 @@ span.grippy::after {
   content: '.. .. .. ..';
 }
 </style>
-<button class="btn btn-success metadata-edit-done" id="btn_upd_md_done" type="submit" style="float:right; opacity: 0;" >{% trans "Done!" %}</button>
 
-{% block body_outer %}
 <ul id="md_tabs" class="nav nav-tabs">
     <li id="metadata_edit_tab" class="active">
         <a data-toggle="tab" href="#edit-metadata"><i class="fa fa-pencil"></i>{% trans "Edit" %}</a>
@@ -368,6 +326,7 @@ span.grippy::after {
     {% trans "Optional" %}
   </div>
 </div>
+
   <ul class="wizard--progress wizard--progress--medium">
       <li data-step="1" id="first" class="is-active" data-toggle="tab" href="#mandatory">
           <a>{% trans "Basic Metadata" %}</a>
@@ -461,7 +420,7 @@ span.grippy::after {
                                         {{ layer_form.scale }}
                                     </div>
 
-                                    <!-- DATA DE CRIAÇÃO - EMBRAPA -->
+                                    <!-- DATA DE CRIAï¿½ï¿½O - EMBRAPA -->
                                     <div class="col-lg-6 col-xs-12">
                                         <span><label for="{{ layer_form.data_criacao|id }}">{{ layer_form.data_criacao.label }}</label></span>
                                         <!--<p class="xxs-font-size">(When a given event occurred on the resource)</p>-->
@@ -551,7 +510,7 @@ span.grippy::after {
                                         <!--<p class="xxs-font-size">(Brief narrative summary of the content of the resource/s)</p>-->
                                       {{ layer_form.embrapa_data_quality_statement }}
                                       </div>
-                                      <a href="#adicionar-referencia" style="margin-top: 10px;" data-toggle="modal" data-target="#addingEmbrapaReferenceModal" class="btn btn-primary">{% trans "Adicionar Referência" %}</a>
+                                      <a href="#adicionar-referencia" style="margin-top: 10px;" data-toggle="modal" data-target="#addingEmbrapaReferenceModal" class="btn btn-primary">{% trans "Adicionar Referï¿½ncia" %}</a>
                                         <span><label style="margin-top: 20px;" for="{{ layer_form.data_quality_statement|id }}">{{ layer_form.data_quality_statement.label }}</label></span>
                                         <!--<p class="xxs-font-size">(Brief narrative summary of the content of the resource/s)</p>-->
                                       {{ layer_form.data_quality_statement }}
@@ -561,7 +520,7 @@ span.grippy::after {
                                       <div class="modal-dialog">
                                         <div class="modal-content">
                                           <div class="modal-header">
-                                            <h5 class="modal-title">Adicionar Referência</h5>
+                                            <h5 class="modal-title">Adicionar Referï¿½ncia</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                               <span aria-hidden="true">&times;</span>
                                             </button>
@@ -569,7 +528,7 @@ span.grippy::after {
                                           <div class="modal-body">
 
                                               <div class="pure-control-group">
-                                                <label>Referência</label>
+                                                <label>Referï¿½ncia</label>
                                                 <input id="id_name_reference" type="text">
                                               </div>
 
@@ -616,7 +575,7 @@ span.grippy::after {
                 </div>
                 <!--<div style="margin-top: 10px; padding-left: 5px; margin-bottom: 19px;">
                   <input type="radio" name="finalidade" value="lp" id="rdbListaProjetos" onclick="save_finalidade()" style="margin-right: 6px;">Listar Projetos</input>
-                  <input type="radio" name="finalidade" value="lag" id="rdbListaAcoesGerenciais" onclick="save_finalidade()" style="margin-left: 15px; margin-right: 6px;">Listar Ações Gerenciais</input>
+                  <input type="radio" name="finalidade" value="lag" id="rdbListaAcoesGerenciais" onclick="save_finalidade()" style="margin-left: 15px; margin-right: 6px;">Listar Aï¿½ï¿½es Gerenciais</input>
                 </div>-->
                 <div>
                     <span><label for="{{ layer_form.choice_projeto_acao_gerencial|id }}">{{ layer_form.choice_projeto_acao_gerencial.label }}</label></span>
@@ -717,7 +676,7 @@ span.grippy::after {
                                       <input id="id_name" type="text">
                                       <label>Auditoria</label>
                                       <input id="id_autoria" type="text">
-                                      <label>Afiliação</label>
+                                      <label>Afiliaï¿½ï¿½o</label>
 									                    <input id="id_afiliacao" type="text">
                                     </div>
                                     <div class="modal-footer">
@@ -810,6 +769,7 @@ span.grippy::after {
     </div>
   </div>
 </div>
+
 <div id="preview" class="tab-pane fade" style="overflow: hidden;">
     <!-- <iframe id="preview_encoder_iframe" height="100%" width="100%" style="width:0;height:0;border:0;border:none;" src="{% url 'layer_metadata_detail' resource.alternate %}"></iframe> -->
     {% if metadataxsl %}
@@ -904,4 +864,3 @@ span.grippy::after {
     });
   });
 </script>
-{% endblock %}
