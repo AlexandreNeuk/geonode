@@ -981,6 +981,13 @@ def add_embrapa_data_quality_statement(request):
 
     return render(request, template_name, context)
 
+def savetext(text):
+    f = open("/usr/src/geonode/geonode/log_layers.txt", "a+")
+    f.write('\n')
+    f.write(text)
+    f.write('\n')
+    f.close()
+
 @login_required
 def layer_metadata(
         request,
@@ -999,6 +1006,7 @@ def layer_metadata(
         form=LayerAttributeForm,
     )
 
+    savetext("1")
     #print teste 01:
     #print("Teste 01")
     #pprint(vars(layer))
@@ -1267,6 +1275,12 @@ def layer_metadata(
 
         print("Atributos da finalidade:")
         purpose = layer_form.cleaned_data['purpose']
+        savetext("Purpose")
+        try:
+            savetext(purpose)
+        except:
+            savetext('ERRO purpose')
+            pass        
         print(purpose)
 
         print("Atributos da declaracao da qualidade do dado:")
@@ -1319,13 +1333,17 @@ def layer_metadata(
                     thesaurus__identifier=thesaurus_setting['name']
                 )
                 layer.tkeywords = tkeywords_data
-        except Exception:
+        except Exception as e:
+            savetext("Exception 1")
+            savetext(e)
             tb = traceback.format_exc()
             logger.error(tb)
 
         try:
             layer.save(notify=True)
         except Exception as e:
+            savetext("Exception 2")
+            savetext(e)
             print(e)
             
         print("Teste 06 - passo do save layers")
@@ -1342,7 +1360,9 @@ def layer_metadata(
                 layer.get_self_resource())
             try:
                 is_manager = request.user.groupmember_set.all().filter(role='manager').exists()
-            except Exception:
+            except Exception as e:
+                savetext("Exception ADMIN_MODERATE_UPLOADS")
+                savetext(e)
                 is_manager = False
             if not is_manager or not can_change_metadata:
                 layer_form.fields['is_approved'].widget.attrs.update(
@@ -1376,13 +1396,17 @@ def layer_metadata(
                 request.user.group_list_all().distinct(),
                 GroupProfile.objects.exclude(
                     access="private").exclude(access="public-invite"))
-        except Exception:
+        except Exception as e:
+            savetext("Exception all_metadata_author_groups")
+            savetext(e)            
             all_metadata_author_groups = GroupProfile.objects.exclude(
                 access="private").exclude(access="public-invite")
         [metadata_author_groups.append(item) for item in all_metadata_author_groups
             if item not in metadata_author_groups]
 
     register_event(request, 'view_metadata', layer)
+    #savetext("RETURN LAYER:")
+    #savetext(layer)
     return render(request, template, context={
         "resource": layer,
         "layer": layer,

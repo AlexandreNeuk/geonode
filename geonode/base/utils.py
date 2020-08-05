@@ -206,6 +206,13 @@ def choice_purpose_list():
 
     return result
 
+def savetext(text):
+    f = open("/usr/src/geonode/geonode/log_utils.txt", "a+")
+    f.write('\n')
+    f.write(text)
+    f.write('\n')
+    f.close()
+
 def choice_purpose():
     current_year = get_only_year()
 
@@ -214,6 +221,8 @@ def choice_purpose():
     #print('settings.EMBRAPA_UNITY_DEFAULT')
     #print(settings.EMBRAPA_UNITY_DEFAULT)
     # Chamada para a��o gerencial
+    savetext("choice_purpose")
+    savetext(unity_id)
     try:
         acao_gerencial_endpoint = 'https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/lista/acoesgerenciais/poridunidadeembrapaano/{0}/{1}'.format(unity_id, current_year)
 
@@ -221,6 +230,8 @@ def choice_purpose():
 
         data = response.json()
     except Exception as error:
+        savetext("choice_purpose erro 1")
+        savetext(error)
         return []
 
     data_acao_gerencial = data["acaoGerencial"]
@@ -233,6 +244,8 @@ def choice_purpose():
 
         data = response.json()
     except Exception as error:
+        savetext("choice_purpose erro 2")
+        savetext(error)        
         return []
 
     data_projeto_id_titulo = data["projeto"]
@@ -290,19 +303,28 @@ def choice_unity():
 
         data_ids = data["unidadesEmbrapa"]
     except Exception as error:
+        savetext("Erro choice_unity: ")
+        savetext(error)
         return []
+    
+    savetext("choice_unity 1")
+
     embrapa_only_ids = [i for i in range(len(data_ids))]
 
     embrapa_only_names = [i for i in range(len(data_ids))]
 
     embrapa_ids_names = [i for i in range(len(data_ids))]
 
+    savetext("choice_unity 2")
+    
     for i in range(len(data_ids)):
         embrapa_only_ids[i] = data_ids[i]["id"]
         embrapa_only_names[i] = data_ids[i]["nome"]
 
     for i in range(len(data_ids)):
         embrapa_ids_names[i] = embrapa_only_ids[i] + ' - ' + embrapa_only_names[i]
+
+    savetext("choice_unity 3")
 
     return embrapa_ids_names
 

@@ -222,14 +222,27 @@ class EmbrapaDataQualityStatementAutocomplete(autocomplete.Select2GroupListView)
 
         return embrapa_data_quality_statements
 
+def savetext(text):
+    f = open("/usr/src/geonode/geonode/log_views_base.txt", "a+")
+    f.write('\n')
+    f.write(text)
+    f.write('\n')
+    f.close()
+
 class EmbrapaPurposeAutocomplete(autocomplete.Select2GroupListView):
     def get_list(self):
-
+        
         embrapa_purposes = choice_purpose()
+        
+        savetext("EmbrapaPurposeAutocomplete")
+        savetext(embrapa_purposes)
 
         print("Unidade da Embrapa:")
         print(settings.EMBRAPA_UNITY_DEFAULT)
 
+        savetext("settings.EMBRAPA_UNITY_DEFAULT")
+        savetext(settings.EMBRAPA_UNITY_DEFAULT)
+        
         return embrapa_purposes
 
 class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
@@ -237,12 +250,17 @@ class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
 
         embrapa_unities = choice_unity()
 
+        savetext("EmbrapaUnityAutocomplete")
+        savetext(embrapa_unities)
         # Derrubar a tabela de embrapa_unities e embrapa_purpose, transforma-los em charfields na camada.
         # E vai ser tupla mesmo, gerada pela lista retornada da api
 
         print("self.q:")
         print(self.q)
 
+        savetext("self.q:")
+        savetext(self.q)
+        
         if self.q:
             settings.EMBRAPA_UNITY_DEFAULT = self.q
 
