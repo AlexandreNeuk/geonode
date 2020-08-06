@@ -835,7 +835,7 @@ MISSING_THUMBNAIL = os.getenv(
 )
 
 GEOSERVER_LOCATION = os.getenv(
-    'GEOSERVER_LOCATION', 'http://localhost:8080/geoserver/'
+    'GEOSERVER_LOCATION', 'http://modelogeo.cnpm.embrapa.br/geoserver/'
 )
 
 GEOSERVER_PUBLIC_SCHEMA = os.getenv(
