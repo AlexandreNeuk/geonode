@@ -252,8 +252,6 @@ class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
 
         savetext("EmbrapaUnityAutocomplete")
         savetext(embrapa_unities)
-        # Derrubar a tabela de embrapa_unities e embrapa_purpose, transforma-los em charfields na camada.
-        # E vai ser tupla mesmo, gerada pela lista retornada da api
 
         print("self.q:")
         print(self.q)

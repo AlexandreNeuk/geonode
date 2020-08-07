@@ -272,10 +272,9 @@ def choice_purpose():
             embrapa_projeto[0] = data_projeto_id_titulo["id"] + ' - ' + data_projeto_id_titulo["titulo"]
         elif type(data_projeto_id_titulo) is list:
             for i in range(len(data_projeto_id_titulo)):
-                print("data_projeto_id_titulo:")
-                print(len(data_projeto_id_titulo))
                 embrapa_projeto[i] = data_projeto_id_titulo[i]["id"] + ' - ' + data_projeto_id_titulo[i]["titulo"]
-
+        savetext("choice_purpose lista:")
+        savetext(str(embrapa_projeto))
         return embrapa_projeto
 
     return []
@@ -325,6 +324,7 @@ def choice_unity():
         embrapa_ids_names[i] = embrapa_only_ids[i] + ' - ' + embrapa_only_names[i]
 
     savetext("choice_unity 3")
+    savetext(str(embrapa_ids_names))    
 
     return embrapa_ids_names
 

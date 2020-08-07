@@ -1006,7 +1006,7 @@ def layer_metadata(
         form=LayerAttributeForm,
     )
 
-    savetext("1")
+    savetext("layer_metadata 1")
     #print teste 01:
     #print("Teste 01")
     #pprint(vars(layer))
@@ -1291,14 +1291,10 @@ def layer_metadata(
         autores = layer_form.cleaned_data['embrapa_autores']
         print(autores)
 
-        #for i in range(len(data_quality_statement)):
-        #    if i != 0:
-        #        format_data_quality_statement += ' ; ' + data_quality_statement[i]
-        #    else:
-        #        format_data_quality_statement = data_quality_statement[i]
-        #print("Formtado antes de salvar:")
-        #print(format_data_quality_statement)
-        #layer_form.cleaned_data['embrapa_data_quality_statement'] = format_data_quality_statement
+        savetext("layer_metadata 2")
+        savetext(unity)
+        savetext("layer_metadata 3")
+        savetext(purpose)
 
         #print("Layer_form com o dado editado:")
         #print(layer_form.cleaned_data['embrapa_data_quality_statement'])
