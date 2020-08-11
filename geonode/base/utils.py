@@ -297,7 +297,7 @@ def choice_purpose():
 def choice_unity():
     try:
         response = requests.get('https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/unidades/lista/todas')
-        savetext('Response: ' + response)
+        savetext('Response: ' + str(response))
 
         data = response.json()
         savetext('len(data): ' + str(len(data)))
