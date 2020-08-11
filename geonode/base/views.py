@@ -232,13 +232,12 @@ def savetext(text):
 class EmbrapaPurposeAutocomplete(autocomplete.Select2GroupListView):
     def get_list(self):
         
-        embrapa_purposes = choice_purpose()
-        
+        embrapa_purposes = choice_purpose()        
         savetext("EmbrapaPurposeAutocomplete")
-        savetext(embrapa_purposes)
-
-        print("Unidade da Embrapa:")
-        print(settings.EMBRAPA_UNITY_DEFAULT)
+        try:
+            savetext(embrapa_purposes)
+        except:
+            savetext("An exception occurred")
 
         savetext("settings.EMBRAPA_UNITY_DEFAULT")
         savetext(settings.EMBRAPA_UNITY_DEFAULT)
