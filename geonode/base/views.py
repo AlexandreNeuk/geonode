@@ -237,7 +237,7 @@ class EmbrapaPurposeAutocomplete(autocomplete.Select2GroupListView):
         try:
             savetext(embrapa_purposes)
         except:
-            savetext("An exception occurred")
+            savetext("An exception occurred - EmbrapaPurposeAutocomplete")
 
         savetext("settings.EMBRAPA_UNITY_DEFAULT")
         savetext(settings.EMBRAPA_UNITY_DEFAULT)
@@ -250,7 +250,10 @@ class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
         embrapa_unities = choice_unity()
 
         savetext("EmbrapaUnityAutocomplete")
-        savetext(embrapa_unities)
+        try:
+            savetext(embrapa_unities)
+        except:
+            savetext("An exception occurred - EmbrapaUnityAutocomplete")        
 
         print("self.q:")
         print(self.q)
