@@ -297,24 +297,26 @@ def choice_purpose():
 def choice_unity():
     try:
         response = requests.get('https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/unidades/lista/todas')
-        
+        savetext('Response: ' + response)
+
         data = response.json()
+        savetext('len(data): ' + len(data))
 
         data_ids = data["unidadesEmbrapa"]
+        savetext('Tamanho data_ids: ' + len(data_ids))
     except Exception as error:
         savetext("Erro choice_unity: ")
         savetext(error)
         return []
     
-    savetext("choice_unity 1")
-
     embrapa_only_ids = [i for i in range(len(data_ids))]
+    savetext('Tamanho embrapa_only_ids: ' + len(embrapa_only_ids))
 
     embrapa_only_names = [i for i in range(len(data_ids))]
+    savetext('Tamanho embrapa_only_names: ' + len(embrapa_only_names))
 
     embrapa_ids_names = [i for i in range(len(data_ids))]
-
-    savetext("choice_unity 2")
+    savetext('Tamanho embrapa_ids_names: ' + len(embrapa_ids_names))
     
     for i in range(len(data_ids)):
         embrapa_only_ids[i] = data_ids[i]["id"]
@@ -323,8 +325,7 @@ def choice_unity():
     for i in range(len(data_ids)):
         embrapa_ids_names[i] = embrapa_only_ids[i] + ' - ' + embrapa_only_names[i]
 
-    savetext("choice_unity 3")
-    savetext(str(embrapa_ids_names))    
+    savetext('Tamanho embrapa_ids_names: ' + len(embrapa_ids_names))
 
     return embrapa_ids_names
 
