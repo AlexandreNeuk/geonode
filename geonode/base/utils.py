@@ -300,23 +300,23 @@ def choice_unity():
         savetext('Response: ' + response)
 
         data = response.json()
-        savetext('len(data): ' + len(data))
+        savetext('len(data): ' + str(len(data)))
 
         data_ids = data["unidadesEmbrapa"]
-        savetext('Tamanho data_ids: ' + len(data_ids))
+        savetext('Tamanho data_ids: ' + str(len(data_ids)))
     except Exception as error:
         savetext("Erro choice_unity: ")
         savetext(error)
         return []
     
     embrapa_only_ids = [i for i in range(len(data_ids))]
-    savetext('Tamanho embrapa_only_ids: ' + len(embrapa_only_ids))
+    savetext('Tamanho embrapa_only_ids: ' + str(len(embrapa_only_ids)))
 
     embrapa_only_names = [i for i in range(len(data_ids))]
-    savetext('Tamanho embrapa_only_names: ' + len(embrapa_only_names))
+    savetext('Tamanho embrapa_only_names: ' + str(len(embrapa_only_names)))
 
     embrapa_ids_names = [i for i in range(len(data_ids))]
-    savetext('Tamanho embrapa_ids_names: ' + len(embrapa_ids_names))
+    savetext('Tamanho embrapa_ids_names: ' + str(len(embrapa_ids_names)))
     
     for i in range(len(data_ids)):
         embrapa_only_ids[i] = data_ids[i]["id"]
@@ -325,7 +325,7 @@ def choice_unity():
     for i in range(len(data_ids)):
         embrapa_ids_names[i] = embrapa_only_ids[i] + ' - ' + embrapa_only_names[i]
 
-    savetext('Tamanho embrapa_ids_names: ' + len(embrapa_ids_names))
+    savetext('Tamanho embrapa_ids_names: ' + str(len(embrapa_ids_names)))
 
     return embrapa_ids_names
 
