@@ -52,13 +52,13 @@ def savetext(text):
     f.write('\n')
     f.close()
 
-savetext('Passo settings - EMBRAPA_UNITY_DEFAULT : {} - {}'.format(settings.EMBRAPA_UNITY_DEFAULT, str(datetime.now())))
-
 EMBRAPA_UNITY_DEFAULT = 0
 ACAO_GERENCIAL_API = False
 PROJETO_API = False
 FILTRO_AUTOR = 'Andre'
 FILTRO_DATA = 'abobrinha'
+
+savetext('Passo settings - EMBRAPA_UNITY_DEFAULT : {} - {}'.format(EMBRAPA_UNITY_DEFAULT, str(datetime.now())))
 
 # GeoNode Version
 VERSION = get_version()
