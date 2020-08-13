@@ -46,19 +46,11 @@ SILENCED_SYSTEM_CHECKS = [
     'urls.W002'
 ]
 
-def savetext(text):
-    f = open("/usr/src/geonode/geonode/log_settings.txt", "a+")
-    f.write(text)
-    f.write('\n')
-    f.close()
-
 EMBRAPA_UNITY_DEFAULT = 96
 ACAO_GERENCIAL_API = False
 PROJETO_API = False
 FILTRO_AUTOR = 'Andre'
 FILTRO_DATA = 'abobrinha'
-
-savetext('Passo settings - EMBRAPA_UNITY_DEFAULT : {} - {}'.format(EMBRAPA_UNITY_DEFAULT, str(datetime.now())))
 
 # GeoNode Version
 VERSION = get_version()

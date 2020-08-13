@@ -817,11 +817,6 @@
                 }
             });
         }
-        else if ((event.target.id === 'select2-id_resource-purpose-container') ||
-                ((event.target.hasAttribute("aria-owns") && (event.target.getAttribute("aria-owns") == "select2-id_resource-purpose-results")))){
-            //
-            send_embrapa_unity_code(0)
-        }
         else if (location.href.indexOf('advanced') > -1) {
             if (event.target.id == 'id_resource-choice_projeto_acao_gerencial_1') 
             {
@@ -863,28 +858,5 @@
                 alert(rs.responseText);                
             }
         })
-    }
-    // 
-    function send_embrapa_unity_code(time) {
-        setTimeout(function(){
-            var code = $('#select2-id_resource-embrapa_unity-container').text()
-            code  = code.substring(1, code.length)
-            code = code.split('-')[0].trim()
-            //console.log('send_embrapa_unity_code: ', code), 
-            //
-            $.ajax({
-                type: 'GET',
-                url: '/base/autocomplete_embrapa_unity',
-                contentType: 'application/json; charset=utf-8',
-                data: {'q': code},
-                success: function(data) {
-                    //
-                    console.log(data)
-                },
-                error: function(rs, e) { 
-                    alert(rs.responseText);
-                }
-            });
-        }, time)
     }
 </script>

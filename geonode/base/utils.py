@@ -57,6 +57,8 @@ from django.db.models.functions import (ExtractDay, ExtractMonth, ExtractYear, E
 ExtractSecond)
 import requests
 
+from . import config
+
 from django.http import HttpResponse
 from django.db import connection
 
@@ -212,9 +214,12 @@ def savetext(text):
 def choice_purpose():
     current_year = get_only_year()
 
-    unity_id = settings.EMBRAPA_UNITY_DEFAULT
-    savetext('Codigo unidade: - EMBRAPA_UNITY_DEFAULT : {} - {}'.format(settings.EMBRAPA_UNITY_DEFAULT, str(datetime.now())))
-
+    unity_id = config.x
+    
+    savetext('Codigo unidade: - config.x : {} - {}'.format(config.x, str(datetime.now())))
+    if unity_id == 0:
+        unity_id = settings.EMBRAPA_UNITY_DEFAULT
+        
     try:
         acao_gerencial_endpoint = 'https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/lista/acoesgerenciais/poridunidadeembrapaano/{0}/{1}'.format(unity_id, current_year)
 

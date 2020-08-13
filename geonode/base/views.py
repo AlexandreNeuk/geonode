@@ -45,6 +45,7 @@ from geonode.base.forms import CuratedThumbnailForm
 from geonode.notifications_helper import send_notification
 
 # embrapa #
+from . import config
 from django.db.models import Q
 from datetime import datetime
 from geonode.base.utils import get_last_update, choice_data_quality_statement, choice_authors, choice_unity, choice_purpose
@@ -240,9 +241,8 @@ class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
 
         embrapa_unities = choice_unity()
 
-        settings.EMBRAPA_UNITY_DEFAULT = self.q
-
-        savetext('Embrapa Unity Autocomplete - EMBRAPA_UNITY_DEFAULT : {} - {}'.format(settings.EMBRAPA_UNITY_DEFAULT, str(datetime.now())))
+        config.x = self.q
+        savetext('Embrapa Unity Autocomplete - config.x : {} - {}'.format(self.q, str(datetime.now())))
         
         return embrapa_unities
 
