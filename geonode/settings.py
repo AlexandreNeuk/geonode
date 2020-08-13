@@ -24,6 +24,7 @@ import re
 import ast
 import sys
 from datetime import timedelta
+from datetime import datetime
 from distutils.util import strtobool  # noqa
 from urllib.parse import urlparse, urlunparse, urljoin
 import logging
@@ -45,9 +46,15 @@ SILENCED_SYSTEM_CHECKS = [
     'urls.W002'
 ]
 
-# Embrapa Unity
+def savetext(text):
+    f = open("/usr/src/geonode/geonode/log_settings.txt", "a+")
+    f.write(text)
+    f.write('\n')
+    f.close()
 
-EMBRAPA_UNITY_DEFAULT = '96'
+savetext("Passo settings: " + str(datetime.now()))
+
+EMBRAPA_UNITY_DEFAULT = 0
 ACAO_GERENCIAL_API = False
 PROJETO_API = False
 FILTRO_AUTOR = 'Andre'
@@ -57,7 +64,6 @@ FILTRO_DATA = 'abobrinha'
 VERSION = get_version()
 
 DEFAULT_CHARSET = "utf-8"
-logger.info('TESTE ================================================= something here')
 # Defines the directory that contains the settings file as the PROJECT_ROOT
 # It is used for relative settings elsewhere.
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))

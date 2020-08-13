@@ -205,7 +205,6 @@ def choice_purpose_list():
 
 def savetext(text):
     f = open("/usr/src/geonode/geonode/log_utils.txt", "a+")
-    f.write('\n')
     f.write(text)
     f.write('\n')
     f.close()
@@ -215,8 +214,7 @@ def choice_purpose():
 
     unity_id = settings.EMBRAPA_UNITY_DEFAULT
 
-    savetext("choice_purpose")
-    savetext(unity_id)
+    savetext("Codigo unidade: " + unity_id + " - " + str(datetime.now()))
     try:
         acao_gerencial_endpoint = 'https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/lista/acoesgerenciais/poridunidadeembrapaano/{0}/{1}'.format(unity_id, current_year)
 

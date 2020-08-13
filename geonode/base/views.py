@@ -224,7 +224,6 @@ class EmbrapaDataQualityStatementAutocomplete(autocomplete.Select2GroupListView)
 
 def savetext(text):
     f = open("/usr/src/geonode/geonode/log_views_base.txt", "a+")
-    f.write('\n')
     f.write(text)
     f.write('\n')
     f.close()
@@ -232,16 +231,8 @@ def savetext(text):
 class EmbrapaPurposeAutocomplete(autocomplete.Select2GroupListView):
     def get_list(self):
         
-        embrapa_purposes = choice_purpose()        
-        savetext("EmbrapaPurposeAutocomplete")
-        try:
-            savetext(embrapa_purposes)
-        except:
-            savetext("An exception occurred - EmbrapaPurposeAutocomplete")
-
-        savetext("settings.EMBRAPA_UNITY_DEFAULT")
-        savetext(settings.EMBRAPA_UNITY_DEFAULT)
-        
+        embrapa_purposes = choice_purpose()
+        savetext('Embrapa Purpose Autocomplete - EMBRAPA_UNITY_DEFAULT : {} - {}'.format(settings.EMBRAPA_UNITY_DEFAULT, str(datetime.now())))
         return embrapa_purposes
 
 class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
@@ -249,16 +240,9 @@ class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
 
         embrapa_unities = choice_unity()
 
-        savetext("EmbrapaUnityAutocomplete")
-        try:
-            savetext(embrapa_unities)
-        except:
-            savetext("An exception occurred - EmbrapaUnityAutocomplete")
+        settings.EMBRAPA_UNITY_DEFAULT = self.q
 
-        if self.q:
-            settings.EMBRAPA_UNITY_DEFAULT = self.q
-
-        savetext('self.q <=> EMBRAPA_UNITY_DEFAULT : {}'.format(settings.EMBRAPA_UNITY_DEFAULT))
+        savetext('Embrapa Unity Autocomplete - EMBRAPA_UNITY_DEFAULT : {} - {}'.format(settings.EMBRAPA_UNITY_DEFAULT, str(datetime.now())))
         
         return embrapa_unities
 
