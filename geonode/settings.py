@@ -52,7 +52,7 @@ def savetext(text):
     f.write('\n')
     f.close()
 
-EMBRAPA_UNITY_DEFAULT = 0
+EMBRAPA_UNITY_DEFAULT = 96
 ACAO_GERENCIAL_API = False
 PROJETO_API = False
 FILTRO_AUTOR = 'Andre'
