@@ -185,42 +185,6 @@ class SpatialRepresentationType(models.Model):
         ordering = ("identifier",)
         verbose_name_plural = 'Metadata Spatial Representation Types'
 
-# embrapa #
-#class Embrapa_Purpose(models.Model):
-
-    # identifier serve para saber se é ação gerencial ou projeto
-#    identifier = models.CharField(max_length=300)
-    # project_code é pra pegar o código do projeto caso for escolhido a opção projeto
-#    project_code = models.IntegerField(default=0, unique=True)
-    # title é o título do projeto, serve tanto para ação gerencial quanto para projeto
-#    title = models.TextField(default='')
-
-#    def __unicode__(self):
-#       return self.title
-
-#    def __str__(self):
-#        return self.title
-
-#    class Meta:
-#        ordering = ("title", )
-#        verbose_name_plural = 'Finalidades'
-
-#class Embrapa_Unity(models.Model):
-    # unity é a unidade da embrapa onde estão armazenados os dados correspondentes a finalidade
-#    unity = models.CharField(choices=(('1', 'um'),('2', 'dois')), max_length=20, default=settings.EMBRAPA_UNITY_DEFAULT, unique=True) #Será trocado de lugar possivelmente
-
-#    def __unicode__(self):
-#        return self.unity
-
-#    def __str__(self):
-#        return self.unity
-
-#    class Meta:
-#        ordering = ("unity",)
-#        verbose_name_plural = 'Unidades'
-        
-# O que levar pro projeto oficial:
-
 class EmbrapaKeywordQuerySet(MP_NodeQuerySet):
     """QuerySet to automatically create a root node if `depth` not given."""
 
@@ -1065,13 +1029,6 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
         max_length=2000,
         blank=True,
         help_text=abstract_help_text)
-    #embrapa_purpose = models.ForeignKey(
-    #    Embrapa_Purpose,
-    #    null=True,
-    #    blank=True,
-    #    verbose_name=_("EmbrapaPurpose"),
-    #    help_text= purpose_embrapa_help_text,
-    #    on_delete=models.CASCADE)
     maintenance_frequency = models.CharField(
         _('maintenance frequency'),
         max_length=255,
@@ -1084,12 +1041,6 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
         _('data criacao'), 
         default=now, 
         help_text=data_criacao_help_text)
-    #embrapa_autores = models.TextField(
-    #    _('Lista de Autores'), 
-    #    max_length=3000, 
-    #    blank=True, 
-    #    null=True, 
-    #    help_text=_('Lista de autores separada por virgulas'))
     caracteres = RegexValidator(
         regex=r"^[0-9]*$", 
         message=_('Permitido apenas números'), 
@@ -1107,12 +1058,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
         blank=True, 
         null=True, 
         help_text='insira o link do visualizador da INDE - somente para CDGs publicados na INDE')
-    #embrapa_unity = models.ForeignKey(
-    #    Embrapa_Unity,
-    #    null=True,
-    #    blank=True,
-    #    help_text = embrapa_unity_help_text,
-    #    on_delete=models.CASCADE)
+
     choice_projeto_acao_gerencial = models.CharField(
         _('Escolha uma das opcoes:'),
         choices=(('Projeto','Listar Projeto'),('Acao Gerencial','Listar Acao Gerencial')), 
@@ -1124,12 +1070,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
         editable=True,
         default=settings.EMBRAPA_UNITY_DEFAULT,
         help_text=embrapa_unity_help_text)
-    #embrapa_data_quality_statement = models.TextField(
-    #    _('embrapa data quality statement'),
-    #    max_length=2000,
-    #    blank=True,
-    #    null=True,
-    #    help_text=data_quality_statement_help_text)
+
     purpose = models.TextField(
         _('purpose'),
         max_length=500,

@@ -199,11 +199,8 @@ def choice_data_quality_statement():
     #return data_quality_statement_content_reference
 
 def choice_purpose_list():
-
     embrapaunity = settings.EMBRAPA_UNITY_DEFAULT
-
     result = choice_purpose()
-
     return result
 
 def savetext(text):
@@ -218,9 +215,6 @@ def choice_purpose():
 
     unity_id = settings.EMBRAPA_UNITY_DEFAULT
 
-    #print('settings.EMBRAPA_UNITY_DEFAULT')
-    #print(settings.EMBRAPA_UNITY_DEFAULT)
-    # Chamada para a��o gerencial
     savetext("choice_purpose")
     savetext(unity_id)
     try:

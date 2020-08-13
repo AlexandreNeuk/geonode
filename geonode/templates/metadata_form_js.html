@@ -801,12 +801,22 @@
 
 <script>
     document.addEventListener('click', function (event) {
-        if (event.target.id === 'select2-id_resource-embrapa_unity-container') {
-            var item = $('#select2-id_resource-purpose-container')
-            if (item) {
-                item[0].addEventListener("onblur", send_embrapa_unity_code(0))
-            }
-        } 
+        if (event.target.id === 'id_resource-embrapa_unity' && event.x === 0) {
+            var code = $('#id_resource-embrapa_unity')[0].options[$('#id_resource-embrapa_unity')[0].selectedIndex].text
+			code = code.split('-')[0].trim()
+            $.ajax({
+                type: 'GET',
+                url: '/base/autocomplete_embrapa_unity',
+                contentType: 'application/json; charset=utf-8',
+                data: {'q': code},
+                success: function(data) {
+                    //
+                },
+                error: function(rs, e) { 
+                    alert(rs.responseText);
+                }
+            });
+        }
         else if ((event.target.id === 'select2-id_resource-purpose-container') ||
                 ((event.target.hasAttribute("aria-owns") && (event.target.getAttribute("aria-owns") == "select2-id_resource-purpose-results")))){
             //

@@ -253,17 +253,13 @@ class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
         try:
             savetext(embrapa_unities)
         except:
-            savetext("An exception occurred - EmbrapaUnityAutocomplete")        
+            savetext("An exception occurred - EmbrapaUnityAutocomplete")
 
-        print("self.q:")
-        print(self.q)
-
-        savetext("self.q:")
-        savetext(self.q)
-        
         if self.q:
             settings.EMBRAPA_UNITY_DEFAULT = self.q
 
+        savetext('self.q <=> EMBRAPA_UNITY_DEFAULT : {}'.format(settings.EMBRAPA_UNITY_DEFAULT))
+        
         return embrapa_unities
 
 class EmbrapaKeywordsAutocomplete(SimpleSelect2View):

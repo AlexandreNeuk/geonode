@@ -370,7 +370,6 @@ class ResourceBaseForm(TranslationModelForm):
         widget=ResourceBaseDateTimePicker(options={"format": "YYYY-MM-DD HH:mm a"})
     )
 
-    # embrapa #
     poc = forms.ModelChoiceField(
         empty_label=_("Person outside GeoNode (fill form)"),
         label=_("Ponto de Contato"),
@@ -391,7 +390,6 @@ class ResourceBaseForm(TranslationModelForm):
         label=_("Termos livres"),
         required=False,
         help_text=_("Caso deseje adicionar alguma palavra-chave que nao consta na lista controlada disponivel no campo 'Palavras-Chave Embrapa', insira palavras-chave adicionais, separando-as por virgula"),
-        # widget=TreeWidget(url='autocomplete_hierachical_keyword'), #Needs updating to work with select2
         widget=TaggitSelect2Custom(url='autocomplete_hierachical_keyword'))
     
     # embrapa #
@@ -401,22 +399,6 @@ class ResourceBaseForm(TranslationModelForm):
         input_formats=['%Y-%m-%d %H:%M %p'],
         help_text="Insira a data de criacao do conjunto de dados",
         widget=ResourceBaseDateTimePicker(options={"format": "YYYY-MM-DD HH:mm a"}))
-
-    #embrapa_keywords = forms.ModelMultipleChoiceField(
-     #   label="Palavras-Chave Embrapa",
-     #   required=False,
-     #   help_text="Insira as palavras-chave, para indexacao do documento, de acordo com o vocabulario controlado elaborado pela equipe de geoinformacao da IDE-Embrapa",
-     #   queryset=Embrapa_Keywords.objects.all(),
-     #   widget=TaggitSelect2Custom(url='autocomplete_embrapa_keywords'))
-        
-    #outra tentativa
-    #embrapa_keywords = EmbrapaKeywordsMultipleChoiceField(
-    #    label=_("Palavras-Chave Embrapa"),
-    #    required=False,
-    #    help_text="Insira as palavras-chave, para indexacao do documento, de acordo com o vocabulario controlado elaborado pela equipe de geoinformacao da IDE-Embrapa",
-    #    choices=Embrapa_Keywords.objects.all(),
-    #    widget=TaggitSelect2Custom(url='autocomplete_embrapa_keywords')
-    #)
     embrapa_keywords = TagField(
         label=_("Palavras-Chave Embrapa"),
         required=False,
@@ -424,25 +406,11 @@ class ResourceBaseForm(TranslationModelForm):
         widget=TaggitSelect2Custom(url='autocomplete_embrapa_keywords')
     )
 
-    """
-    regions = TreeNodeMultipleChoiceField(
-        label=_("Regions"),
-        required=False,
-        queryset=Region.objects.all(),
-        level_indicator=u'___')
-    """
     regions = RegionsMultipleChoiceField(
         label=_("Regioes"),
         required=False,
         choices=get_tree_data(),
         widget=RegionsSelect)
-    #embrapa_unity = forms.ModelChoiceField(
-    #    empty_label=_("Unidade Embrapa"),
-    #    label=_("Unidade Embrapa"),
-    #    required=False,
-    #    queryset= Embrapa_Unity.objects.all(),
-    #    widget= autocomplete.ModelSelect2(url='autocomplete_embrapa_unity')
-    #)
     choice_projeto_acao_gerencial = forms.ChoiceField(
         label=_("Escolha uma das opcoes:"),
         choices=(('Projeto','Listar Projeto'),('Acao Gerencial','Listar Acao Gerencial')), 
@@ -451,31 +419,20 @@ class ResourceBaseForm(TranslationModelForm):
         label=_("Unidade Embrapa"),
         required=False,
         choice_list=choice_unity(),
-        widget= autocomplete.ListSelect2(url='autocomplete_embrapa_unity')
+        #widget= autocomplete.ListSelect2(url='autocomplete_embrapa_unity')
     )
-    #embrapa_purpose = forms.ModelChoiceField(
-    #    empty_label=_("Finalidade Embrapa"),
-    #    label=_("Finalidade Embrapa"),
-    #    required=False,
-    #    queryset= Embrapa_Purpose.objects.all(),
-    #    widget=autocomplete.ModelSelect2(url='autocomplete_embrapa_purpose')
-    #)
-
     purpose = autocomplete.Select2ListChoiceField(
         label=_("Finalidade"),
         required=False,
         choice_list=choice_purpose(),
         widget= autocomplete.ListSelect2(url='autocomplete_embrapa_purpose')
     )
-
     embrapa_data_quality_statement = forms.MultipleChoiceField(
         label=_("Declaracao da Qualidade do Dado - Fontes"),
         required=False,
         choices=choice_data_quality_statement(),
         widget = autocomplete.Select2Multiple(url='autocomplete_embrapa_data_quality_statement')
-        #widget= autocomplete.ListSelect2(url='autocomplete_embrapa_data_quality_statement')
     )
-
     embrapa_autores = forms.MultipleChoiceField(
         label=_("Autores"),
         required=False,
