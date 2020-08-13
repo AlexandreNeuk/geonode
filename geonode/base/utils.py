@@ -213,8 +213,8 @@ def choice_purpose():
     current_year = get_only_year()
 
     unity_id = settings.EMBRAPA_UNITY_DEFAULT
+    savetext('Codigo unidade: - EMBRAPA_UNITY_DEFAULT : {} - {}'.format(settings.EMBRAPA_UNITY_DEFAULT, str(datetime.now())))
 
-    savetext("Codigo unidade: " + unity_id + " - " + str(datetime.now()))
     try:
         acao_gerencial_endpoint = 'https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/lista/acoesgerenciais/poridunidadeembrapaano/{0}/{1}'.format(unity_id, current_year)
 

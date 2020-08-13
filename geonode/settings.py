@@ -52,7 +52,7 @@ def savetext(text):
     f.write('\n')
     f.close()
 
-savetext("Passo settings: " + str(datetime.now()))
+savetext('Passo settings - EMBRAPA_UNITY_DEFAULT : {} - {}'.format(settings.EMBRAPA_UNITY_DEFAULT, str(datetime.now())))
 
 EMBRAPA_UNITY_DEFAULT = 0
 ACAO_GERENCIAL_API = False
