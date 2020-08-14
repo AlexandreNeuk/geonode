@@ -48,7 +48,6 @@ from geonode.notifications_helper import send_notification
 from django.db.models import Q
 from datetime import datetime
 from geonode.base.utils import get_last_update, choice_data_quality_statement, choice_authors, choice_unity, choice_purpose
-from geonode.base.config import setx
 
 
 def batch_modify(request, ids, model):
@@ -251,9 +250,8 @@ class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
             f = open("/usr/src/geonode/geonode/log_unidade.txt", "a+")
             f.write(self.q)
             f.close()
-            setx("VIEWS - The file (log_unidade) does not exist")
+            savetext("VIEWS - The file (log_unidade) does not exist")
 
-        setx(self.q)
         savetext('Embrapa Unity Autocomplete - self.q : {} - {}'.format(self.q, str(datetime.now())))
         
         return embrapa_unities

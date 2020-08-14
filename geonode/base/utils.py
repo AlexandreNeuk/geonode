@@ -56,8 +56,6 @@ from geonode.base.models import Embrapa_Data_Quality_Statement, Embrapa_Authors
 from django.db.models.functions import (ExtractDay, ExtractMonth, ExtractYear, ExtractHour, ExtractMinute, ExtractSecond)
 import requests
 
-from geonode.base.config import getx
-
 from django.http import HttpResponse
 from django.db import connection
 
@@ -220,7 +218,7 @@ def choice_purpose():
         unity_id = f.read()
         f.close()
     else:
-        setx("UTILS - The file (log_unidade) does not exist")
+        savetext("UTILS - The file (log_unidade) does not exist")
 
     savetext('Codigo unidade: - unity_id : {} - {}'.format(unity_id, str(datetime.now())))
     if unity_id == 0:
