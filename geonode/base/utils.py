@@ -215,7 +215,7 @@ def choice_purpose():
 
     unity_id = getx()
     
-    savetext('Codigo unidade: - config.x : {} - {}'.format(config.x, str(datetime.now())))
+    savetext('Codigo unidade: - unity_id : {} - {}'.format(unity_id, str(datetime.now())))
     if unity_id == 0:
         unity_id = settings.EMBRAPA_UNITY_DEFAULT
 

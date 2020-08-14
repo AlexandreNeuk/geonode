@@ -243,7 +243,7 @@ class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
         embrapa_unities = choice_unity()
 
         setx(self.q)
-        savetext('Embrapa Unity Autocomplete - config.x : {} - {}'.format(self.q, str(datetime.now())))
+        savetext('Embrapa Unity Autocomplete - self.q : {} - {}'.format(self.q, str(datetime.now())))
         
         return embrapa_unities
 
