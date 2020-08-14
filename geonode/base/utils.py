@@ -53,11 +53,10 @@ _names = ['Zipped Shapefile', 'Zipped', 'Shapefile', 'GML 2.0', 'GML 3.1.1', 'CS
 # embrapa #
 from datetime import datetime
 from geonode.base.models import Embrapa_Data_Quality_Statement, Embrapa_Authors
-from django.db.models.functions import (ExtractDay, ExtractMonth, ExtractYear, ExtractHour, ExtractMinute, 
-ExtractSecond)
+from django.db.models.functions import (ExtractDay, ExtractMonth, ExtractYear, ExtractHour, ExtractMinute, ExtractSecond)
 import requests
 
-from . import config
+from geonode.base.config import getx
 
 from django.http import HttpResponse
 from django.db import connection
@@ -214,12 +213,12 @@ def savetext(text):
 def choice_purpose():
     current_year = get_only_year()
 
-    unity_id = config.x
+    unity_id = getx()
     
     savetext('Codigo unidade: - config.x : {} - {}'.format(config.x, str(datetime.now())))
     if unity_id == 0:
         unity_id = settings.EMBRAPA_UNITY_DEFAULT
-        
+
     try:
         acao_gerencial_endpoint = 'https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/lista/acoesgerenciais/poridunidadeembrapaano/{0}/{1}'.format(unity_id, current_year)
 
