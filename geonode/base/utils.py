@@ -213,8 +213,15 @@ def savetext(text):
 def choice_purpose():
     current_year = get_only_year()
 
-    unity_id = getx()
-    
+    unity_id = 0
+    import os
+    if os.path.exists("/usr/src/geonode/geonode/log_unidade.txt"):
+        f = open("/usr/src/geonode/geonode/log_unidade.txt", "r")
+        unity_id = f.read()
+        f.close()
+    else:
+        setx("UTILS - The file (log_unidade) does not exist")
+
     savetext('Codigo unidade: - unity_id : {} - {}'.format(unity_id, str(datetime.now())))
     if unity_id == 0:
         unity_id = settings.EMBRAPA_UNITY_DEFAULT

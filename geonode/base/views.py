@@ -241,6 +241,17 @@ class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
     def get_list(self):
 
         embrapa_unities = choice_unity()
+        import os
+        if os.path.exists("/usr/src/geonode/geonode/log_unidade.txt"):
+            os.remove("/usr/src/geonode/geonode/log_unidade.txt")
+            f = open("/usr/src/geonode/geonode/log_unidade.txt", "a+")
+            f.write(self.q)
+            f.close()
+        else:
+            f = open("/usr/src/geonode/geonode/log_unidade.txt", "a+")
+            f.write(self.q)
+            f.close()
+            setx("VIEWS - The file (log_unidade) does not exist")
 
         setx(self.q)
         savetext('Embrapa Unity Autocomplete - self.q : {} - {}'.format(self.q, str(datetime.now())))
