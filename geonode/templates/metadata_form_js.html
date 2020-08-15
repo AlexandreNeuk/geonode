@@ -802,6 +802,8 @@
 <script>
     document.addEventListener('click', function (event) {
         if (event.target.id === 'id_resource-embrapa_unity' && event.x === 0) {
+            //
+            document.getElementById("select2-id_resource-purpose-container").innerHTML = '';
             var code = $('#id_resource-embrapa_unity')[0].options[$('#id_resource-embrapa_unity')[0].selectedIndex].text
 			code = code.split('-')[0].trim()
             $.ajax({
