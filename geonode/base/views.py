@@ -225,7 +225,7 @@ class EmbrapaDataQualityStatementAutocomplete(autocomplete.Select2GroupListView)
 
 def savetext(text):
     f = open("/usr/src/geonode/geonode/log_views_base.txt", "a+")
-    f.write(text)
+    f.write(str(text))
     f.write('\n')
     f.close()
 

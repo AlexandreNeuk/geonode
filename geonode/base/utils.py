@@ -204,7 +204,7 @@ def choice_purpose_list():
 
 def savetext(text):
     f = open("/usr/src/geonode/geonode/log_utils.txt", "a+")
-    f.write(text)
+    f.write(str(text))
     f.close()
 
 def choice_purpose(val):
@@ -218,7 +218,7 @@ def choice_purpose(val):
         if os.path.exists("/usr/src/geonode/geonode/log_unidade.txt"):
             os.remove("/usr/src/geonode/geonode/log_unidade.txt")
         f = open("/usr/src/geonode/geonode/log_unidade.txt", "a+")
-        f.write(val)
+        f.write(str(val))
         f.close()
     elif val == 0:
         if os.path.exists("/usr/src/geonode/geonode/log_unidade.txt"):

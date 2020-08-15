@@ -984,7 +984,7 @@ def add_embrapa_data_quality_statement(request):
 def savetext(text):
     f = open("/usr/src/geonode/geonode/log_layers.txt", "a+")
     f.write('\n')
-    f.write(text)
+    f.write(str(text))
     f.write('\n')
     f.close()
 
