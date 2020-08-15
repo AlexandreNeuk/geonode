@@ -205,11 +205,11 @@ def choice_purpose_list():
 def savetext(text):
     f = open("/usr/src/geonode/geonode/log_utils.txt", "a+")
     f.write(text)
-    f.write('\n')
     f.close()
 
 def choice_purpose(val):
-    savetext("DEF choice_purpose VALUE : ", str(val))
+    savetext("DEF choice_purpose VALUE : ")
+    savetext(str(val))
 
     if val == "":
         val = 0
@@ -227,7 +227,8 @@ def choice_purpose(val):
             f.close()
     
 
-    savetext("DEF -> choice_purpose VALUE : ", str(val))
+    savetext("DEF -> choice_purpose VALUE : ")
+    savetext(str(val))
 
     current_year = get_only_year()
 
@@ -235,8 +236,8 @@ def choice_purpose(val):
         val = 96
 
     unity_id = val
-    savetext("DEF -> unity_id : ", unity_id)
-
+    savetext("DEF -> unity_id : ")
+    savetext(unity_id)
     
     if unity_id == 0:
         unity_id = settings.EMBRAPA_UNITY_DEFAULT
