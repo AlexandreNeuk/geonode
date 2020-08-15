@@ -208,30 +208,48 @@ def savetext(text):
     f.write('\n')
     f.close()
 
-def choice_purpose():
+def choice_purpose(val):
+    savetext("DEF choice_purpose VALUE : ", str(val))
+
+    if val == "":
+        val = 0
+
+    if int(val) > 0:
+        if os.path.exists("/usr/src/geonode/geonode/log_unidade.txt"):
+            os.remove("/usr/src/geonode/geonode/log_unidade.txt")
+        f = open("/usr/src/geonode/geonode/log_unidade.txt", "a+")
+        f.write(val)
+        f.close()
+    elif val == 0:
+        if os.path.exists("/usr/src/geonode/geonode/log_unidade.txt"):
+            f = open("/usr/src/geonode/geonode/log_unidade.txt", "r")
+            val = f.read()
+            f.close()
+    
+
+    savetext("DEF -> choice_purpose VALUE : ", str(val))
+
     current_year = get_only_year()
 
-    unity_id = 0
-    import os
-    if os.path.exists("/usr/src/geonode/geonode/log_unidade.txt"):
-        f = open("/usr/src/geonode/geonode/log_unidade.txt", "r")
-        unity_id = f.read()
-        f.close()
-    else:
-        savetext("UTILS - The file (log_unidade) does not exist")
+    if val == 0 or val == "0":
+        val = 96
 
-    savetext('Codigo unidade: - unity_id : {} - {}'.format(unity_id, str(datetime.now())))
+    unity_id = val
+    savetext("DEF -> unity_id : ", unity_id)
+
+    
     if unity_id == 0:
         unity_id = settings.EMBRAPA_UNITY_DEFAULT
 
     try:
+        savetext('UTILS - Codigo unidade : {} - {}'.format(unity_id, str(datetime.now())))
         acao_gerencial_endpoint = 'https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/lista/acoesgerenciais/poridunidadeembrapaano/{0}/{1}'.format(unity_id, current_year)
 
         response = requests.get(acao_gerencial_endpoint)
 
         data = response.json()
     except Exception as error:
-        savetext("choice_purpose erro 1")
+        savetext("UTILS - choice_purpose erro 1")
         savetext(error)
         return []
 
@@ -267,7 +285,7 @@ def choice_purpose():
 
         return embrapa_acao_gerencial
 
-    elif settings.PROJETO_API:
+    else :
         if type(data_projeto_id_titulo) is dict:
             embrapa_projeto = ['1']
             embrapa_projeto[0] = data_projeto_id_titulo["id"] + ' - ' + data_projeto_id_titulo["titulo"]

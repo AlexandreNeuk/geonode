@@ -231,30 +231,23 @@ def savetext(text):
 
 class EmbrapaPurposeAutocomplete(autocomplete.Select2GroupListView):
     def get_list(self):
-        
-        embrapa_purposes = choice_purpose()
-        savetext('Embrapa Purpose Autocomplete - EMBRAPA_UNITY_DEFAULT : {} - {}'.format(settings.EMBRAPA_UNITY_DEFAULT, str(datetime.now())))
+        savetext("choice_purpose 0 ")
+        embrapa_purposes = choice_purpose(codigo)
         return embrapa_purposes
 
 class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
     def get_list(self):
 
         embrapa_unities = choice_unity()
-        import os
-        if os.path.exists("/usr/src/geonode/geonode/log_unidade.txt"):
-            os.remove("/usr/src/geonode/geonode/log_unidade.txt")
-            f = open("/usr/src/geonode/geonode/log_unidade.txt", "a+")
-            f.write(self.q)
-            f.close()
-        else:
-            f = open("/usr/src/geonode/geonode/log_unidade.txt", "a+")
-            f.write(self.q)
-            f.close()
-            savetext("VIEWS - The file (log_unidade) does not exist")
-
-        savetext('Embrapa Unity Autocomplete - self.q : {} - {}'.format(self.q, str(datetime.now())))
-        
+        print(self.q)
+        if self.q:
+            settings.EMBRAPA_UNITY_DEFAULT = self.q
+   
+        global codigo
+        codigo = self.q
+        print('settings.setval : ', self.q)
         return embrapa_unities
+
 
 class EmbrapaKeywordsAutocomplete(SimpleSelect2View):
 

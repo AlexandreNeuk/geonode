@@ -421,10 +421,11 @@ class ResourceBaseForm(TranslationModelForm):
         choice_list=choice_unity(),
         #widget= autocomplete.ListSelect2(url='autocomplete_embrapa_unity')
     )
+
     purpose = autocomplete.Select2ListChoiceField(
         label=_("Finalidade"),
         required=False,
-        choice_list=choice_purpose(),
+        choice_list=choice_purpose(0),
         widget= autocomplete.ListSelect2(url='autocomplete_embrapa_purpose')
     )
     embrapa_data_quality_statement = forms.MultipleChoiceField(
@@ -445,10 +446,11 @@ class ResourceBaseForm(TranslationModelForm):
     def __init__(self, *args, **kwargs):
         super(ResourceBaseForm, self).__init__(*args, **kwargs)
         print("purpose no forms do base")
+
         self.fields['purpose'] = autocomplete.Select2ListChoiceField(
             label=_("Finalidade"),
             required=False,
-            choice_list=choice_purpose(),
+            choice_list=choice_purpose(0),
             widget= autocomplete.ListSelect2(url='autocomplete_embrapa_purpose')
         )
         print("data_quality_statement no forms do base")
