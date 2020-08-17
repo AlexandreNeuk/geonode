@@ -184,7 +184,7 @@ msgstr "Editar Metadados"
 
 #: geonode/static/geonode/js/upload/LayerInfo.js:372
 msgid "Upload Metadata"
-msgstr "Carregar Metadados"
+msgstr "Carregar Dados"
 
 #: geonode/static/geonode/js/upload/LayerInfo.js:373
 msgid "Upload SLD"

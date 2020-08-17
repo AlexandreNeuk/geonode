@@ -2675,7 +2675,7 @@ msgstr "Editar Camada"
 
 #: geonode/layers/templates/layers/layer_detail.html:472
 msgid "Upload Metadata"
-msgstr "Carregar Metadados"
+msgstr "Carregar Dados"
 
 #: geonode/layers/templates/layers/layer_detail.html:480
 #: geonode/layers/templates/layers/layer_detail.html:495

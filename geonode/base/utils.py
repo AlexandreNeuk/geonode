@@ -208,8 +208,8 @@ def savetext(text):
     f.close()
 
 def choice_purpose(val):
-    savetext("DEF choice_purpose VALUE : ")
-    savetext(str(val))
+    #savetext("DEF choice_purpose VALUE : {}".format(str(val)))
+    #savetext()
 
     if val == "":
         val = 0
@@ -225,10 +225,6 @@ def choice_purpose(val):
             f = open("/usr/src/geonode/geonode/log_unidade.txt", "r")
             val = f.read()
             f.close()
-    
-
-    savetext("DEF -> choice_purpose VALUE : ")
-    savetext(str(val))
 
     current_year = get_only_year()
 
@@ -236,82 +232,53 @@ def choice_purpose(val):
         val = 96
 
     unity_id = val
-    savetext("DEF -> unity_id : ")
-    savetext(unity_id)
     
     if unity_id == 0:
         unity_id = settings.EMBRAPA_UNITY_DEFAULT
 
-    try:
-        savetext('UTILS - Codigo unidade : {} - {}'.format(unity_id, str(datetime.now())))
-        acao_gerencial_endpoint = 'https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/lista/acoesgerenciais/poridunidadeembrapaano/{0}/{1}'.format(unity_id, current_year)
-
-        response = requests.get(acao_gerencial_endpoint)
-
-        data = response.json()
-    except Exception as error:
-        savetext("UTILS - choice_purpose erro 1")
-        savetext(error)
-        return []
-
-    data_acao_gerencial = data["acaoGerencial"]
-
-    # Chamada para projeto
-    try:
-        projeto_endpoint = 'https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/projeto/lista/poridunidadeembrapa?id_unidadeembrapa={0}'.format(unity_id)
-        
-        response = requests.get(projeto_endpoint)
-
-        data = response.json()
-    except Exception as error:
-        savetext("choice_purpose erro 2")
-        savetext(error)        
-        return []
-
-    data_projeto_id_titulo = data["projeto"]
-
-    tamanho_acao_gerencial = [i for i in range(len(data_acao_gerencial))]
-
-    tamanho_projeto = [i for i in range(len(data_projeto_id_titulo))]
-
-    embrapa_acao_gerencial_projeto_ids = [i for i in range(len(data_acao_gerencial) + len(data_projeto_id_titulo))]
-
-    embrapa_acao_gerencial = [i for i in range(len(data_acao_gerencial))]
-
-    embrapa_projeto = [i for i in range(len(data_projeto_id_titulo))]
-
     if settings.ACAO_GERENCIAL_API:
+        try:
+            #savetext('UTILS - Codigo unidade : {} - {}'.format(unity_id, str(datetime.now())))
+            acao_gerencial_endpoint = 'https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/lista/acoesgerenciais/poridunidadeembrapaano/{0}/{1}'.format(unity_id, current_year)
+            response = requests.get(acao_gerencial_endpoint)
+            data = response.json()
+        except Exception as error:
+            savetext("UTILS - choice_purpose erro 1")
+            savetext(error)
+            return []
+
+        data_acao_gerencial = data["acaoGerencial"]
+        embrapa_acao_gerencial = [i for i in range(len(data_acao_gerencial))]
+
         for i in range(len(data_acao_gerencial)):
             embrapa_acao_gerencial[i] = data_acao_gerencial[i]["acaoGerencialId"] + ' - ' + data_acao_gerencial[i]["titulo"]
 
         return embrapa_acao_gerencial
-
     else :
+        # Chamada para projeto
+        try:
+            projeto_endpoint = 'https://sistemas.sede.embrapa.br/corporativows/rest/corporativoservice/projeto/lista/poridunidadeembrapa?id_unidadeembrapa={0}'.format(unity_id)
+            response = requests.get(projeto_endpoint)
+            data = response.json()
+        except Exception as error:
+            savetext("choice_purpose erro 2")
+            savetext(error)        
+            return []
+        
+        data_projeto_id_titulo = data["projeto"]
+        embrapa_projeto = [i for i in range(len(data_projeto_id_titulo))]
+
         if type(data_projeto_id_titulo) is dict:
             embrapa_projeto = ['1']
             embrapa_projeto[0] = data_projeto_id_titulo["id"] + ' - ' + data_projeto_id_titulo["titulo"]
         elif type(data_projeto_id_titulo) is list:
             for i in range(len(data_projeto_id_titulo)):
                 embrapa_projeto[i] = data_projeto_id_titulo[i]["id"] + ' - ' + data_projeto_id_titulo[i]["titulo"]
-        savetext("choice_purpose lista:")
-        savetext(str(embrapa_projeto))
+        #savetext("choice_purpose lista:")
+        #savetext(str(embrapa_projeto))
         return embrapa_projeto
 
     return []
-
-    #for i in range(len(data_acao_gerencial)):
-    #    embrapa_acao_gerencial_projeto_ids[i] = data_acao_gerencial[i]["acaoGerencialId"] + ' - ' + data_acao_gerencial[i]["titulo"]
-
-    #j = len(data_acao_gerencial)
-
-    #for i in range(len(data_projeto_id_titulo)):
-        #embrapa_acao_gerencial_projeto_ids[j] = data_projeto_id_titulo[i]["id"] + ' - ' + data_projeto_id_titulo[i]["titulo"]
-    #    print(len(data_projeto_id_titulo))
-    #    print(data_projeto_id_titulo[0]["id"])
-    #    print(data_projeto_id_titulo[0]["titulo"])
-    #    j = j + 1
-
-    #return embrapa_acao_gerencial_projeto_ids
 
 
 def choice_unity():
