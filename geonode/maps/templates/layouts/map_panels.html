@@ -60,7 +60,7 @@ function save_autor() {
   }
   if ($('#id_afiliacao').val().length == 0)
   {
-    alert('Informe a Afiliação');
+    alert('Informe a Afiliaï¿½ï¿½o');
     return;
   }
   if ($('#id_name').val().length > 0 &&
@@ -94,7 +94,7 @@ function save_autor() {
 function save_referencia() {
   if ($('#id_name_reference').val().length == 0)
   {
-    alert('Informe a Referência');
+    alert('Informe a Referï¿½ncia');
     return;
   }
 
@@ -109,7 +109,7 @@ function save_referencia() {
         //
         $('#addingEmbrapaReferenceModal').modal('hide');
         if (JSON.parse(data).success) {
-          alert('Referência salva com sucesso!')
+          alert('Referï¿½ncia salva com sucesso!')
         }
         else {
           alert('Ocorreu um erro ao tentar salvar!')
@@ -324,7 +324,7 @@ span.grippy::after {
 }
 </style>
 <button class="btn btn-success metadata-edit-done" id="btn_upd_md_done" type="submit" style="float:right; opacity: 0;" >{% trans "Done!" %}</button>
-{% block body_outer %}
+
 <ul id="md_tabs" class="nav nav-tabs">
   <li id="metadata_edit_tab" class="active">
       <a data-toggle="tab" href="#edit-metadata"><i class="fa fa-pencil"></i>{% trans "Edit" %}</a>
@@ -524,7 +524,7 @@ span.grippy::after {
                                         <!--<p class="xxs-font-size">(General explanation of the data producer's knowledge about the lineage)</p>-->
                                         {{ map_form.embrapa_data_quality_statement }}
                                       </div>
-                                        <a href="#adicionar-referencia" style="margin-top: 10px;" data-toggle="modal" data-target="#addingEmbrapaReferenceModal" class="btn btn-primary">{% trans "Adicionar Referência" %}</a>
+                                        <a href="#adicionar-referencia" style="margin-top: 10px;" data-toggle="modal" data-target="#addingEmbrapaReferenceModal" class="btn btn-primary">{% trans "Adicionar Referï¿½ncia" %}</a>
                                         <span><label style="margin-top: 20px;" for="{{ map_form.data_quality_statement|id }}">{{ map_form.data_quality_statement.label }}</label></span>
                                         <!--<p class="xxs-font-size">(Brief narrative summary of the content of the resource/s)</p>-->
                                       {{ map_form.data_quality_statement }}
@@ -534,7 +534,7 @@ span.grippy::after {
                                       <div class="modal-dialog">
                                         <div class="modal-content">
                                           <div class="modal-header">
-                                            <h5 class="modal-title">Adicionar Referência</h5>
+                                            <h5 class="modal-title">Adicionar Referï¿½ncia</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                               <span aria-hidden="true">&times;</span>
                                             </button>
@@ -542,7 +542,7 @@ span.grippy::after {
                                           <div class="modal-body">
 
                                               <div class="pure-control-group">
-                                                <label>Referência</label>
+                                                <label>Referï¿½ncia</label>
                                                 <input id="id_name_reference" type="text">
                                               </div>
 
@@ -588,7 +588,7 @@ span.grippy::after {
                     {{ map_form.edition }}
                 </div>
                 <!--<button type="button" onclick="submitBtn('btn_projeto_embrapa')" class="btn btn-primary">Listar Projetos</button>
-                <button type="button" onclick="submitBtn('btn_acao_gerencial_embrapa')" class="btn btn-primary">Listar Ações Gerenciais</button>-->
+                <button type="button" onclick="submitBtn('btn_acao_gerencial_embrapa')" class="btn btn-primary">Listar Aï¿½ï¿½es Gerenciais</button>-->
                 <div>
                     <span><label for="{{ map_form.choice_projeto_acao_gerencial|id }}">{{ map_form.choice_projeto_acao_gerencial.label }}</label></span>
                     <!--<p class="xxs-font-size">(Brief narrative summary of the content of the resource/s)</p>-->
@@ -686,7 +686,7 @@ span.grippy::after {
                                       <input id="id_name" type="text">
                                       <label>Auditoria</label>
                                       <input id="id_autoria" type="text">
-                                      <label>Afiliação</label>
+                                      <label>Afiliaï¿½ï¿½o</label>
                                       <input id="id_afiliacao" type="text">
                                     </div>
                                     <div class="modal-footer">
@@ -785,4 +785,3 @@ span.grippy::after {
     </div>
 </div>
 </div>
-{% endblock %}

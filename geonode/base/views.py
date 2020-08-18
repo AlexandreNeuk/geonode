@@ -231,7 +231,8 @@ def savetext(text):
 
 class EmbrapaPurposeAutocomplete(autocomplete.Select2GroupListView):
     def get_list(self):
-        savetext("choice_purpose 0 ")
+
+        print('EmbrapaPurposeAutocomplete - self.request: ', self.request)
         embrapa_purposes = choice_purpose(codigo)
         return embrapa_purposes
 
@@ -240,6 +241,7 @@ class EmbrapaUnityAutocomplete(autocomplete.Select2GroupListView):
 
         embrapa_unities = choice_unity()
         print(self.q)
+        print('EmbrapaUnityAutocomplete - self.request: ', self.request)
         if self.q:
             settings.EMBRAPA_UNITY_DEFAULT = self.q
    
